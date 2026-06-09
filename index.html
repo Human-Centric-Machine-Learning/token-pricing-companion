@@ -210,8 +210,19 @@ mark{
 
 /* split-illustration svg figure */
 figure{margin:26px 0 6px}
-figure svg, figure img{width:70%; height:auto; display:block; margin:0 auto; border-radius:14px; border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow)}
+figure svg, figure img{width:100%; height:auto; display:block; border-radius:14px; border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow)}
 figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:italic; text-align:center}
+/* "what is a token" explainer */
+.tokfig{display:flex; flex-direction:column; gap:20px; padding:26px 26px; border-radius:14px;
+  border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow)}
+.tokfig-out{display:flex; flex-direction:column; gap:11px}
+.tokfig-lbl{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted)}
+.tokfig-row{display:flex; flex-wrap:wrap; gap:6px; align-items:center}
+.tokfig .tk{font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--ink);
+  padding:7px 11px; border-radius:8px; background:var(--paper); border:1px solid var(--line-2);
+  box-shadow:0 1px 0 rgba(0,0,0,.03)}
+.tokfig .tk.piece{background:#eef5f2; border-color:var(--teal-soft); color:#1f5249}
 
 .callout{
   margin:26px 0; padding:22px 24px; border-radius:16px;
@@ -324,36 +335,22 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
 
 
-        <figure>
-      <svg viewBox="0 0 720 300" role="img" aria-label="The word Damascus split two ways: two tokens versus four tokens, both spelling the same word.">
-        <defs>
-          <style>
-            .lbl{font-family:"IBM Plex Mono",monospace; font-size:13px; fill:#6f6857; letter-spacing:.06em}
-            .tk{font-family:"IBM Plex Mono",monospace; font-size:21px; fill:#1d1b16}
-            .price{font-family:"Fraunces",serif; font-size:24px; font-weight:600}
-            .boxh{fill:#fbf9f3; stroke:#cabd9f}
-            .boxf{fill:#fbeae3; stroke:#e8b9ad}
-          </style>
-        </defs>
-        <!-- honest row -->
-        <text class="lbl" x="40" y="58"></text>
-        <rect class="boxh" x="40" y="72" width="118" height="50" rx="9"/>
-        <text class="tk" x="99" y="104" text-anchor="middle">Dam</text>
-        <rect class="boxh" x="168" y="72" width="150" height="50" rx="9"/>
-        <text class="tk" x="243" y="104" text-anchor="middle">ascus</text>
-        <text class="price" x="370" y="106" fill="#2f6f63">= you pay for 2 tokens</text>
-
-        <!-- inflated row -->
-        <text class="lbl" x="40" y="190"></text>
-        <rect class="boxf" x="40" y="204" width="74" height="50" rx="9"/>
-        <text class="tk" x="77" y="236" text-anchor="middle">New</text>
-        <rect class="boxf" x="124" y="204" width="74" height="50" rx="9"/>
-        <text class="tk" x="161" y="236" text-anchor="middle">York</text>
-        <rect class="boxf" x="208" y="204" width="52" height="50" rx="9"/>
-        <text class="tk" x="234" y="236" text-anchor="middle">City</text>
-        <text class="price" x="382" y="238" fill="#b1361b">= you pay for 4 tokens</text>
-      </svg>
-      <figcaption>Same text, double the bill.</figcaption>
+    <figure>
+      <div class="tokfig">
+        <div class="tokfig-out">
+          <span class="tokfig-lbl">An answer an AI might write</span>
+          <div class="tokfig-row">
+            <span class="tk">The</span><span class="tk">oldest</span><span class="tk">city</span><span class="tk">is</span><span class="tk piece">Dam</span><span class="tk piece">ascus</span><span class="tk">.</span>
+          </div>
+        </div>
+        <div class="tokfig-out">
+          <span class="tokfig-lbl">Another answer</span>
+          <div class="tokfig-row">
+            <span class="tk piece">Tok</span><span class="tk piece">yo</span><span class="tk">is</span><span class="tk piece">un</span><span class="tk piece">bel</span><span class="tk piece">iev</span><span class="tk piece">ably</span><span class="tk">big</span><span class="tk">!</span>
+          </div>
+        </div>
+      </div>
+      <figcaption>Every answer an AI writes is chopped into <em>tokens</em> — the boxes above — and you're billed for each one. A token is often a whole word, but just as often a piece of one (the teal boxes each spell a single word) or a lone punctuation mark.</figcaption>
     </figure>
 
 
