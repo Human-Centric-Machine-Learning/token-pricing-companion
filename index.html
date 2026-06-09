@@ -212,6 +212,10 @@ mark{
 figure{margin:26px 0 6px}
 figure svg, figure img{width:100%; height:auto; display:block; border-radius:14px; border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow)}
 figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:italic; text-align:center}
+.fig-row{display:flex; gap:20px; margin:26px 0 6px}
+.fig-row figure{flex:1; margin:0; min-width:0}
+.fig-row figure img{width:100%}
+.fig-row figcaption{margin-top:8px}
 /* "what is a token" explainer */
 .tokfig{display:flex; flex-direction:column; gap:20px; padding:26px 26px; border-radius:14px;
   border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow)}
@@ -419,6 +423,17 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       <img src="figures/misreporting.png" alt="Strategy to manipulate tokenizations by splitting tokens.">
       <figcaption>The process a malicious AI provider could use to overcharge users.</figcaption>
     </figure>
+
+    <div class="fig-row">
+      <figure>
+        <img src="figures/Llama_1B_topp_T13_over_axis.png" alt="How much tokens a malicious provider could be overcharging you.">
+        <figcaption>How much tokens a malicious provider could be overcharging you. Experiments with a Llama-3.2-1B model using temperature 1.3.</figcaption>
+      </figure>
+      <figure>
+        <img src="figures/L1B_profit_1.3.png" alt="How much tokens a malicious provider could be overcharging you.">
+        <figcaption>How much tokens a malicious provider could be overcharging you. Experiments with a Llama-3.2-1B model using temperature 1.3.</figcaption>
+      </figure>
+    </div>
 
   </section>
 
