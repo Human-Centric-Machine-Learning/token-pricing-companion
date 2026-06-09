@@ -208,7 +208,7 @@ mark{
   color:inherit; padding:0 1px; font-weight:500;
 }
 
-/* split-illustration svg figure */
+/* figures */
 figure{margin:26px 0 6px}
 figure svg, figure img{width:100%; height:auto; display:block; border-radius:14px; border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow)}
 figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:italic; text-align:center}
@@ -217,13 +217,20 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
 .fig-row figure img{width:100%}
 .fig-row figcaption{margin-top:8px}
 
-.footnote {
+.footnote{font-size:.85em; color:var(--muted); margin-top:20px}
 
-    font-size: 0.8em;
-
-    color: #555;
-
-  }
+/* main research question */
+.question{position:relative; overflow:hidden; margin:30px 0; padding:30px 34px; border-radius:18px;
+  background:linear-gradient(180deg,#fff,#f6efe0); border:1px solid var(--accent-soft); box-shadow:var(--shadow)}
+.question::before{content:""; position:absolute; left:0; top:0; bottom:0; width:5px;
+  background:linear-gradient(180deg,var(--accent),var(--gold))}
+.question::after{content:"?"; position:absolute; right:24px; bottom:-46px; font-family:"Fraunces",serif;
+  font-weight:600; font-size:210px; line-height:1; color:var(--accent); opacity:.07; pointer-events:none}
+.question .q-label{font-family:"IBM Plex Mono",monospace; font-size:12px; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--accent); margin-bottom:12px; display:block}
+.question .q-text{font-family:"Fraunces",serif; font-style:italic; font-weight:500;
+  font-size:clamp(22px,3.4vw,30px); line-height:1.34; color:var(--ink); margin:0; position:relative; z-index:1}
+.question .q-text b{color:var(--accent); font-weight:600; font-style:normal}
 
 /* "what is a token" explainer */
 .tokfig{display:flex; flex-direction:column; gap:20px; padding:26px 26px; border-radius:14px;
@@ -278,6 +285,12 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
 .th-body{font-family:"Fraunces",serif; font-size:clamp(19px,2.7vw,24px); line-height:1.4; color:var(--ink); margin:0}
 .th-body b{color:var(--teal); font-weight:600}
 
+/* warning variant (a threat, not a fix) — terracotta */
+.theorem.warn{background:linear-gradient(180deg,#fdf1ec,#f8e7df); border-color:var(--accent-soft)}
+.theorem.warn::before{background:linear-gradient(180deg,var(--accent),var(--gold))}
+.theorem.warn .th-label{color:var(--accent)}
+.theorem.warn .th-body b{color:var(--accent)}
+
 /* ---------- footer ---------- */
 footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 .cite{
@@ -294,6 +307,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   body{font-size:17px}
   .bills{grid-template-columns:1fr}
   .twocol{grid-template-columns:1fr}
+  .fig-row{flex-direction:column}
   header.hero{padding:54px 0 24px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -311,7 +325,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   <header class="hero">
     <div class="eyebrow">
       <span class="badge">ICML 2026</span>
-      <span class="dot"></span> Oral 
+      <span class="dot"></span> Oral
       <span class="dot"></span> Seoul, South Korea
     </div>
 
@@ -320,8 +334,8 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     <p class="lede">When you use an AI, you pay for every <b>token</b> it produces. But how do you know <b>how many tokens the AI really used?</b></p>
 
     <div class="authors">
-      <b>Ander Artola Velasco<sup>1</sup></b> · <b>Stratis Tsirtsis</b><sup>2</sup> · <b>Nastaran Okati</b><sup>3</sup> · <b>Manuel Gomez Rodriguez</b><sup>1</sup>
-      <div class="affil"><small><sup>1</sup>MPI for Software Systems · <sup>2</sup>Hasso Plattner Institute · <sup>3</sup>MPI for Intelligent Systems </small></div>
+      <b>Ander Artola Velasco</b><sup>1</sup> · <b>Stratis Tsirtsis</b><sup>2</sup> · <b>Nastaran Okati</b><sup>3</sup> · <b>Manuel Gomez Rodriguez</b><sup>1</sup>
+      <div class="affil"><sup>1</sup>MPI for Software Systems · <sup>2</sup>Hasso Plattner Institute · <sup>3</sup>MPI for Intelligent Systems</div>
     </div>
 
     <div class="actions">
@@ -341,11 +355,9 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
   <!-- ===================== CHAPTER 1 ===================== -->
   <section class="chapter reveal">
-    <div class="kicker"><span class="num">1</span> </div>
-    <h2> What are <span class="em">tokens</span> and why should we care?</h2>
-    <p>Most AI models represent the answer they produce using chunks of text called <em><strong>tokens</strong></em>. Below you can see two different answers an AI might give to you when you are asking it to tell you facts about cities:
+    <h2>What are <span class="em">tokens</span>, and why should you care?</h2>
 
-
+    <p>Most AI models build their answers out of chunks of text called <em><strong>tokens</strong></em>. Below are two answers an AI might give when you ask it for facts about cities:</p>
 
     <figure>
       <div class="tokfig">
@@ -362,19 +374,18 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
           </div>
         </div>
       </div>
-      <figcaption></figcaption>
     </figure>
-    Each of the boxes above correspond to one token used by the AI to write its answer. As you can see, tokens might be full works or piece of one (teal boxes).
 
-    When you use an AI, the provider hosting this services charges you by the number of tokens the AI used to write your answer, a practice called <em><strong>pay-per-token</strong></em>. Interestingly, because of the process the AI uses to write its answer, the same response can be written using a different sequence of tokens, called a <em><strong>tokenization</strong></em>, which in turns means that you can be charged a different amount for the same answer. Below, you can drag the slider to let change the tokenization of a text generated by an AI and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>
-      
+    <p>Each box above is one token the AI used to write its answer. As you can see, a token can be a whole word (grey boxes) or just a piece of one (teal boxes).</p>
+
+    <p>When you use an AI, the provider hosting the service charges you for the number of tokens the AI used — a practice called <em><strong>pay-per-token</strong></em>. And here is the catch: the same response can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which means you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>
 
 
   <!-- ===================== INTERACTIVE ===================== -->
   <div class="stage reveal">
     <div class="stage-card">
       <h3 class="stage-title">The same answer, different prices</h3>
-      <p class="stage-sub"></p>
+      <p class="stage-sub">Every extra token raises the bill — even though the text you receive never changes.</p>
 
       <div class="tokens" id="tokens" aria-live="polite"></div>
 
@@ -383,7 +394,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
           <span class="ctrl-label">Additional tokens</span>
           <span class="ctrl-val" id="sliceVal">honest tokenization</span>
         </div>
-        <input type="range" id="slider" min="0" max="21" value="0" step="1" aria-label="Slicing aggressiveness">
+        <input type="range" id="slider" min="0" max="21" value="0" step="1" aria-label="Number of extra tokens">
       </div>
 
       <div class="bills single" id="bills">
@@ -411,46 +422,44 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     </div>
   </div>
 
-  <hr class="rule" style="margin-top:48px">
 
-    <p></p>
+    <p>As AI-as-a-service becomes ever more prevalent, with a whole industry forming around it, we ask an adversarial question:</p>
+    <div class="question">
+      <span class="q-label">We ask:</span>
+      <p class="q-text">Can tokenizations be manipulated to overcharge users by <b>inflating the token count</b> of an AI's answers?</p>
+    </div>
+
+    <hr class="rule" style="margin-top:48px">
   </section>
 
 
-
-
-
-
-
-
-  
   <!-- ===================== CHAPTER 2 ===================== -->
-
-    <!-- to talk about the policy and add plots-->
   <section class="chapter reveal">
-    <div class="kicker"><span class="num">2</span> </div>
-    <h2> Can tokeniations be <span class="em">manipulated</span> ?  </h2>
-    <p></p>
+    <h2>Can tokenizations be <span class="em">manipulated</span>?</h2>
+
+    <p>Unfortunately, the answer is yes. We present a procedure a malicious provider could use to inflate the tokenizations they report. As the figure below shows, it takes the tokenization the AI produced, picks a token, and splits it into two smaller ones — raising the total count without changing a single character — then repeats this a chosen number of times, <em>m</em>.<sup><a href="#fn2" id="ref2">2</a></sup> Worse still, we show that most tokenizations found this way could have been generated by the AI on its own, so they look perfectly <q>plausible</q> to the user.</p>
 
     <figure>
-      <img src="figures/misreporting.png" alt="Strategy to manipulate tokenizations by splitting tokens.">
+      <img src="figures/misreporting.png" alt="Strategy to manipulate tokenizations by repeatedly splitting one token into two.">
       <figcaption>The process a malicious AI provider could use to overcharge users.</figcaption>
     </figure>
 
+    <p>The figures below show experiments with a real model (Llama-3.2-1B). The first shows how many extra tokens a malicious provider could add by applying the procedure; the second translates those extra tokens into the provider's profit. The overcharge can be substantial. The different colors represent how <q>varied</q> the tokens used by the AI are; the blue lines correspond to more varied tokenizations, which let a malicious provider overcharge more.</p>
+
     <div class="fig-row">
       <figure>
-        <img src="figures/Llama_1B_topp_T13_over_axis.png" alt="How much tokens a malicious provider could be overcharging you.">
-        <figcaption>How much tokens a malicious provider could be overcharging you. Experiments with a Llama-3.2-1B model using temperature 1.3.</figcaption>
+        <img src="figures/Llama_1B_topp_T13_over_axis.png" alt="Percentage of extra tokens a malicious provider could add, versus how many times the procedure is applied.">
+        <figcaption>How many extra tokens a malicious provider could charge for, as a function of how many times the procedure is applied. Llama-3.2-1B, temperature 1.3.</figcaption>
       </figure>
       <figure>
-        <img src="figures/L1B_profit_1.3.png" alt="How much tokens a malicious provider could be overcharging you.">
-        <figcaption>How much tokens a malicious provider could be overcharging you. Experiments with a Llama-3.2-1B model using temperature 1.3.</figcaption>
+        <img src="figures/L1B_profit_1.3.png" alt="The provider's profit gain from manipulating tokenizations, versus their profit margin.">
+        <figcaption>How much extra profit a malicious provider could make, as a function of their profit margin. Llama-3.2-1B, temperature 1.3.</figcaption>
       </figure>
     </div>
 
-    <div class="theorem">
-      <p class="th-label"> We show that:</p>
-      <p class="th-body">It is possible to manipulate tokenizations to overcharge users by splitting tokens in a way that increases the total count without changing the actual text.</p>
+    <div class="theorem warn">
+      <p class="th-label">Takeaway</p>
+      <p class="th-body">Tokenizations <b>can</b> be manipulated to overcharge users: splitting tokens inflates the count without changing a single character of the text.</p>
     </div>
 
   </section>
@@ -460,39 +469,39 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
   <!-- ===================== CHAPTER 3 ===================== -->
   <section class="chapter reveal">
-    <div class="kicker"><span class="num">3</span> </div>
     <h2>Pay per <span class="em">character</span>, not per token</h2>
-    <p>If the problem is that tokenizations can be manipulated while users pay by the token count, is there a better way to price AI that leaves nothing to manipulate? There is!:</p>
+
+    <p>If tokenizations can be manipulated while users pay by the token, is there a better way to price AI — one that leaves nothing to manipulate? There is:</p>
 
     <div class="theorem">
-      <p class="th-label"> We show that:</p>
-      <p class="th-body">The <b>only</b> pricing rule that guaranteees there is no incentive for a provider to overcharge is to bill by the <b>character</b>.</p>
+      <p class="th-label">We show that</p>
+      <p class="th-body">The <b>only</b> pricing rule that removes any incentive for a provider to overcharge is to bill by the <b>character</b>.</p>
     </div>
 
-    <p>The intuition is very simple: the text "Damascus" generated by the AI is eight characters no matter how you many tokens the providers claims that the model used. A character count can't be inflated by changing the tokenization of the text, so there is nothing left to game!</p>
+    <p>The intuition is simple: "Damascus" is eight characters no matter how many tokens the provider claims the model used. A character count can't be inflated by re-tokenizing the text, so there is nothing left to game.</p>
 
     <div class="twocol">
       <div class="panel bad">
         <h4>Pay-per-token</h4>
-        <p>The price depends on how the text is encoded, which is a (partially) random process and can be manipulated.</p>
+        <p>The price depends on how the text is encoded, which is a (partly) random process and can be manipulated.</p>
       </div>
       <div class="panel good">
         <h4>Pay-per-character</h4>
-        <p>The price depends only on the text itself. However you encode it, the count is fixed. There is nothing left to game, removing the economic incentive to overcharge users.</p>
+        <p>The price depends only on the text itself. However you encode it, the count is fixed — there is nothing left to game, removing the incentive to overcharge users.</p>
       </div>
     </div>
   </section>
 
-  <!-- ===================== CHAPTER 5 ===================== -->
 
+  <!-- ===================== FOOTNOTES + FOOTER ===================== -->
+  <p id="fn1" class="footnote">
+    <sup>1</sup> For illustration, this assumes each token costs $0.14. Real prices are much lower — typically about $1 per million tokens. <a href="#ref1">↩</a>
+  </p>
 
-  <!-- ===================== FOOTER ===================== -->
-<p id="fn1" class="footnote">
-  <sup>1</sup> For illustration purposes, this assumes that each token costs $0.14. In reality, prices are way lower, typically around $1 for every million tokens.
+  <p id="fn2" class="footnote">
+    <sup>2</sup> Check the paper for the full procedure and the strategy used to select and split tokens. <a href="#ref2">↩</a>
+  </p>
 
-  <a href="#ref1">↩</a>
-
-</p>
   <footer class="reveal">
     <h2 style="font-size:24px; margin:0 0 16px">Cite this work</h2>
     <div class="cite">@inproceedings{artolavelasco2026overcharging,
@@ -607,13 +616,6 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
   }else{
     document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});
-  }
-
-  // paper link guard: if still a placeholder, point users to the repo
-  var pl=document.getElementById("paperLink");
-  if(pl && pl.getAttribute("href")==="#"){
-    pl.setAttribute("href","https://github.com/Human-Centric-Machine-Learning/token-pricing");
-    pl.setAttribute("target","_blank"); pl.setAttribute("rel","noopener");
   }
 })();
 </script>
