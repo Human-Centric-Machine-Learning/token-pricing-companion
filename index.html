@@ -245,6 +245,12 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
   box-shadow:0 1px 0 rgba(0,0,0,.03)}
 .tokfig .tk.piece{background:#eef5f2; border-color:var(--teal-soft); color:#1f5249}
 
+/* Global token styles for response demo */
+.tk{font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--ink);
+  padding:7px 11px; border-radius:8px; background:var(--paper); border:1px solid var(--line-2);
+  box-shadow:0 1px 0 rgba(0,0,0,.03); display:inline-block; animation:pop .22s ease}
+.tk.piece{background:#eef5f2; border-color:var(--teal-soft); color:#1f5249}
+
 /* chatbox demo animation */
 .chatbox-demo{display:flex; flex-direction:column; gap:20px; padding:26px 26px; border-radius:14px;
   border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow); margin-bottom:20px}
@@ -259,6 +265,12 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
 .chatbox-submit i{font-size:20px}
 .chatbox-submit.flash{animation:iconFlash .5s ease}
 @keyframes iconFlash{0%{color:var(--accent)}50%{color:var(--card)}100%{color:var(--accent)}}
+
+.response-demo{display:flex; flex-direction:column; gap:20px; padding:26px 26px;
+  border-radius:14px; border:1px solid var(--line); background:var(--card);
+  box-shadow:var(--shadow); margin-bottom:20px; height:100px; overflow:hidden; justify-content:center}
+.response-demo .cursor{width:12px;height:22px;background:var(--accent);animation:blink .8s step-end infinite;margin-left:2px;margin-bottom:13px;flex-shrink:0;border-radius:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
 .callout{
   margin:26px 0; padding:22px 24px; border-radius:16px;
@@ -391,6 +403,12 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       </div>
     </figure>
     <figure>
+       <div class="response-demo">
+         <div class="tokfig-row" id="responseTokens"></div>
+         <div class="cursor" id="responseCursor"></div>
+       </div>
+    </figure>
+    <figure style="display:none">
       <div class="tokfig">
         <div class="tokfig-out">
           <span class="tokfig-lbl">An answer an AI might write</span>
@@ -646,39 +664,95 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     });
   }
 
-  // ---- chatbox animation ----
-  function animateChatbox() {
+  // ---- demo cycle animation ----
+  var demoCycles = [
+    {
+      prompt: "What is the oldest city in the world?",
+      tokens: [
+        {t:"The",c:"tk"},{t:"oldest",c:"tk"},{t:"city",c:"tk"},{t:"is",c:"tk"},
+        {t:"Dam",c:"tk piece"},{t:"ascus",c:"tk piece"},{t:".",c:"tk"}
+      ]
+    },
+    {
+      prompt: "How big is Tokyo?",
+      tokens: [
+        {t:"Tok",c:"tk piece"},{t:"yo",c:"tk piece"},{t:"is",c:"tk"},
+        {t:"un",c:"tk piece"},{t:"bel",c:"tk piece"},{t:"iev",c:"tk piece"},
+        {t:"ably",c:"tk piece"},{t:"big",c:"tk"},{t:"!",c:"tk"}
+      ]
+    }
+  ];
+
+  function typeText(element, text, speed, callback) {
+    var index = 0;
+    var interval = setInterval(function() {
+      if (index < text.length) {
+        element.textContent += text.charAt(index);
+        index++;
+      } else {
+        clearInterval(interval);
+        if (callback) callback();
+      }
+    }, speed);
+  }
+
+  function animateTokens(tokens, idx, container) {
+    if (idx >= tokens.length) return;
+    var span = document.createElement('span');
+    span.className = tokens[idx].c;
+    span.textContent = tokens[idx].t;
+    container.appendChild(span);
+    setTimeout(function() { animateTokens(tokens, idx + 1, container); }, 300);
+  }
+
+  function animateDemoCycle(cycleIndex) {
+    var chatboxDemo = document.querySelector('.chatbox-demo');
+    var responseDemo = document.querySelector('.response-demo');
     var placeholder = document.getElementById("chatboxPlaceholder");
     var textElement = document.getElementById("chatboxText");
     var submitButton = document.getElementById("chatboxSubmit");
+    var responseTokens = document.getElementById("responseTokens");
 
-    if (!placeholder || !textElement || !submitButton) return;
+    if (!chatboxDemo || !responseDemo || !placeholder || !textElement ||
+        !submitButton || !responseTokens) return;
 
-    var question = "What is the oldest city in the world?";
-    var typingSpeed = 80; // ms per character (user preference: slower)
-    var charIndex = 0;
+    var cursorEl = document.getElementById("responseCursor");
 
-    // After 2 seconds, start typing
+    var cycle = demoCycles[cycleIndex];
+
+    // Reset content
+    textElement.textContent = '';
+    responseTokens.innerHTML = '';
+    placeholder.classList.remove('hidden');
+    cursorEl.style.display = '';
+
+    // Step 1: Type prompt
     setTimeout(function() {
-      // Hide placeholder
-      placeholder.classList.add("hidden");
-
-      // Type question character by character
-      var typeInterval = setInterval(function() {
-        if (charIndex < question.length) {
-          textElement.textContent += question.charAt(charIndex);
-          charIndex++;
-        } else {
-          clearInterval(typeInterval);
-
-          // Flash the submit button
-          submitButton.classList.add("flash");
-          setTimeout(function() {
-            submitButton.classList.remove("flash");
-          }, 300);
-        }
-      }, typingSpeed);
+      placeholder.classList.add('hidden');
+      typeText(textElement, cycle.prompt, 80, function() {
+        submitButton.classList.add('flash');
+        setTimeout(function() {
+          submitButton.classList.remove('flash');
+          // Step 2: Animate response tokens
+          cursorEl.style.display = 'none';
+          setTimeout(function() { animateTokens(cycle.tokens, 0, responseTokens); }, 300);
+        }, 300);
+      });
     }, 2000);
+
+    // Step 3: Hide and loop
+    var promptTime = 2000 + cycle.prompt.length * 80 + 300 + 200;
+    var tokenTime = cycle.tokens.length * 300;
+    var totalTime = promptTime + tokenTime + 2000;
+
+    setTimeout(function() {
+      textElement.textContent = '';
+      responseTokens.innerHTML = '';
+      placeholder.classList.remove('hidden');
+      cursorEl.style.display = '';
+      var nextIndex = (cycleIndex + 1) % demoCycles.length;
+      setTimeout(function() { animateDemoCycle(nextIndex); }, 500);
+    }, totalTime);
   }
 
   // ---- gentle scroll reveal ----
@@ -688,9 +762,9 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
         if(e.isIntersecting){
           e.target.classList.add("in");
           io.unobserve(e.target);
-          // If this is a chapter with chatbox, trigger the animation
+          // If this is a chapter with chatbox, trigger the demo cycle
           if(e.target.classList.contains("chapter") && e.target.querySelector(".chatbox-demo")){
-            animateChatbox();
+            animateDemoCycle(0);
           }
         }
       });
@@ -698,10 +772,10 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
   }else{
     document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});
-    // Trigger chatbox animation for the first chapter if it has a chatbox
+    // Trigger demo cycle for the first chapter if it has a chatbox
     var firstChapter = document.querySelector(".chapter.reveal");
     if(firstChapter && firstChapter.querySelector(".chatbox-demo")){
-      animateChatbox();
+      animateDemoCycle(0);
     }
   }
 })();
