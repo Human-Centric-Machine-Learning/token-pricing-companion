@@ -595,6 +595,10 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   var charCount = document.getElementById("charCount");
   var overcharge= document.getElementById("overcharge");
 
+  // Track active intervals and timeouts for cleanup
+  var activeIntervals = [];
+  var activeTimeouts = [];
+
   slider.max = maxSplits;
   charCount.textContent = baseChars;
 
@@ -690,9 +694,14 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
         index++;
       } else {
         clearInterval(interval);
+        // Remove from active intervals
+        var idx = activeIntervals.indexOf(interval);
+        if (idx > -1) activeIntervals.splice(idx, 1);
         if (callback) callback();
       }
     }, speed);
+    activeIntervals.push(interval);
+    return interval;
   }
 
   function animateTokens(tokens, idx, container) {
@@ -701,7 +710,8 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     span.className = tokens[idx].c;
     span.textContent = tokens[idx].t;
     container.appendChild(span);
-    setTimeout(function() { animateTokens(tokens, idx + 1, container); }, 300);
+    var timeoutId = setTimeout(function() { animateTokens(tokens, idx + 1, container); }, 300);
+    activeTimeouts.push(timeoutId);
   }
 
   function animateDemoCycle(cycleIndex) {
@@ -726,38 +736,84 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     cursorEl.style.display = '';
 
     // Step 1: Type prompt
-    setTimeout(function() {
+    var t1 = setTimeout(function() {
       placeholder.classList.add('hidden');
       typeText(textElement, cycle.prompt, 80, function() {
         submitButton.classList.add('flash');
-        setTimeout(function() {
+        var t2 = setTimeout(function() {
           submitButton.classList.remove('flash');
           // Step 2: Animate response tokens
           cursorEl.style.display = 'none';
-          setTimeout(function() { animateTokens(cycle.tokens, 0, responseTokens); }, 300);
+          var t3 = setTimeout(function() { animateTokens(cycle.tokens, 0, responseTokens); }, 300);
+          activeTimeouts.push(t3);
         }, 300);
+        activeTimeouts.push(t2);
       });
     }, 2000);
+    activeTimeouts.push(t1);
 
     // Step 3: Hide and loop
     var promptTime = 2000 + cycle.prompt.length * 80 + 300 + 200;
     var tokenTime = cycle.tokens.length * 300;
     var totalTime = promptTime + tokenTime + 4000;
 
-    setTimeout(function() {
+    var t4 = setTimeout(function() {
       textElement.textContent = '';
       responseTokens.innerHTML = '';
       placeholder.classList.remove('hidden');
       cursorEl.style.display = '';
       var nextIndex = (cycleIndex + 1) % demoCycles.length;
-      setTimeout(function() { animateDemoCycle(nextIndex); }, 500);
+      var t5 = setTimeout(function() { animateDemoCycle(nextIndex); }, 500);
+      activeTimeouts.push(t5);
     }, totalTime);
+    activeTimeouts.push(t4);
   }
 
-   // ---- trigger demo animation for first chapter ----
+   // ---- animation cleanup ----
+  function clearAllAnimations() {
+    // Clear all active intervals
+    activeIntervals.forEach(function(interval) {
+      clearInterval(interval);
+    });
+    activeIntervals = [];
+
+    // Clear all active timeouts
+    activeTimeouts.forEach(function(timeout) {
+      clearTimeout(timeout);
+    });
+    activeTimeouts = [];
+  }
+
+  // ---- trigger demo animation for first chapter ----
    var firstChapter = document.querySelector(".chapter");
    if(firstChapter && firstChapter.querySelector(".chatbox-demo")){
-     animateDemoCycle(0);
+     // Reset animation state and start fresh
+     function startDemoAnimation() {
+       // Clear all pending animations
+       clearAllAnimations();
+
+       // Reset DOM elements
+       var textElement = document.getElementById("chatboxText");
+       var responseTokens = document.getElementById("responseTokens");
+       var placeholder = document.getElementById("chatboxPlaceholder");
+       var cursorEl = document.getElementById("responseCursor");
+
+       if (textElement) textElement.textContent = '';
+       if (responseTokens) responseTokens.innerHTML = '';
+       if (placeholder) placeholder.classList.remove('hidden');
+       if (cursorEl) cursorEl.style.display = '';
+
+       animateDemoCycle(0);
+     }
+
+     startDemoAnimation();
+
+     // Restart animation when user switches back to the tab
+     document.addEventListener("visibilitychange", function() {
+       if (document.visibilityState === "visible") {
+         startDemoAnimation();
+       }
+     });
    }
 
    // ---- gentle scroll reveal ----
