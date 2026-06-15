@@ -250,6 +250,7 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
   padding:7px 11px; border-radius:8px; background:var(--paper); border:1px solid var(--line-2);
   box-shadow:0 1px 0 rgba(0,0,0,.03); display:inline-block; animation:pop .22s ease}
 .tk.piece{background:#eef5f2; border-color:var(--teal-soft); color:#1f5249}
+.tk.punct{background:#fcece9; border-color:var(--accent-soft); color:var(--accent)}
 
 /* chatbox demo animation */
 .chatbox-demo{display:flex; flex-direction:column; gap:20px; padding:26px 26px; border-radius:14px;
@@ -387,9 +388,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   <section class="chapter reveal">
     <h2>What are <span class="em">tokens</span>, and why should you care?</h2>
 
-    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>. These can be anything—from words, subwords or even letters to numbers and punctuation.
-
-
+    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>. These can be anything—from words (teal boxes), subwords (grey boxes), or punctuation (orange boxes) to letters, numbers, or emojis.</p>
 
     <figure>
       <div class="chatbox-demo">
@@ -413,13 +412,13 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
         <div class="tokfig-out">
           <span class="tokfig-lbl">An answer an AI might write</span>
           <div class="tokfig-row">
-            <span class="tk">The</span><span class="tk">oldest</span><span class="tk">city</span><span class="tk">is</span><span class="tk piece">Dam</span><span class="tk piece">ascus</span><span class="tk">.</span>
+            <span class="tk">The</span><span class="tk">oldest</span><span class="tk">city</span><span class="tk">is</span><span class="tk piece">Dam</span><span class="tk piece">ascus</span><span class="tk punct">.</span>
           </div>
         </div>
         <div class="tokfig-out">
           <span class="tokfig-lbl">Another answer</span>
           <div class="tokfig-row">
-            <span class="tk piece">Tok</span><span class="tk piece">yo</span><span class="tk">is</span><span class="tk piece">un</span><span class="tk piece">bel</span><span class="tk piece">iev</span><span class="tk piece">ably</span><span class="tk">big</span><span class="tk">!</span>
+            <span class="tk piece">Tok</span><span class="tk piece">yo</span><span class="tk">is</span><span class="tk piece">un</span><span class="tk piece">bel</span><span class="tk piece">iev</span><span class="tk piece">ably</span><span class="tk">big</span><span class="tk punct">!</span>
           </div>
         </div>
       </div>
@@ -670,7 +669,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       prompt: "What is the oldest city in the world?",
       tokens: [
         {t:"The",c:"tk"},{t:"oldest",c:"tk"},{t:"city",c:"tk"},{t:"is",c:"tk"},
-        {t:"Dam",c:"tk piece"},{t:"ascus",c:"tk piece"},{t:".",c:"tk"}
+        {t:"Dam",c:"tk piece"},{t:"ascus",c:"tk piece"},{t:".",c:"tk punct"}
       ]
     },
     {
@@ -678,7 +677,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       tokens: [
         {t:"Tok",c:"tk piece"},{t:"yo",c:"tk piece"},{t:"is",c:"tk"},
         {t:"un",c:"tk piece"},{t:"bel",c:"tk piece"},{t:"iev",c:"tk piece"},
-        {t:"ably",c:"tk piece"},{t:"big",c:"tk"},{t:"!",c:"tk"}
+        {t:"ably",c:"tk piece"},{t:"big",c:"tk"},{t:"!",c:"tk punct"}
       ]
     }
   ];
