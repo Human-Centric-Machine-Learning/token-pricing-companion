@@ -388,7 +388,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   <section class="chapter">
     <h2>What are <span class="em">tokens</span>, and why should you care?</h2>
 
-    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>. These can be anything—from <b style="color:#2D7669">words</b>, <b style="color:#5D5746">subwords</b>, or <b style="color:var(--gold)">punctuation</b> to letters, numbers, or emojis.</p>
+    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>. These can be anything—from <b style="color:#5D5746">words</b>, <b style="color:#2D7669">subwords</b>, or <b style="color:var(--gold)">punctuation</b> to letters, numbers, or emojis.</p>
 
     <figure>
       <div class="chatbox-demo">
@@ -426,7 +426,12 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
     <!--<p>Each box above is one token the AI used to write its answer. As you can see, a token can be a whole word (grey boxes) or just a piece of one (teal boxes).</p>-->
 
-    <p>When you use an AI, the provider hosting the service charges you for the number of tokens the AI used — a practice called <em><strong>pay-per-token</strong></em>. However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>
+    <p>To answer your request, the AI needs to do some work behind the scenes. To put it simply, more tokens mean more computational work. And these computations are heavy! It would be really slow (like really really slow) to run the best models out there on a regular computer. For this reason, when you submit your request, it is sent over the internet to a more powerful computer owned by the AI provider. The model runs on this computer, generates the answer token by token, and the provider sends the result back to you.
+    </p>
+
+    <!--TODO: add gif with prompt-response sent to the provider-->
+
+    <!--<p>When you use an AI model, the provider hosting the service charges you for the number of tokens the AI used — a practice called <em><strong>pay-per-token</strong></em>. However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>-->
 
 
   <!-- ===================== INTERACTIVE ===================== -->
