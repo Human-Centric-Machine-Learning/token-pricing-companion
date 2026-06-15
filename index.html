@@ -245,6 +245,21 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
   box-shadow:0 1px 0 rgba(0,0,0,.03)}
 .tokfig .tk.piece{background:#eef5f2; border-color:var(--teal-soft); color:#1f5249}
 
+/* chatbox demo animation */
+.chatbox-demo{display:flex; flex-direction:column; gap:20px; padding:26px 26px; border-radius:14px;
+  border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow); margin-bottom:20px}
+.chatbox-input-container{display:flex; align-items:center; position:relative; width:100%; height: 30px}
+.chatbox-placeholder{font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--faint);
+  position:absolute; left:12px; pointer-events:none; transition:opacity .2s ease}
+.chatbox-placeholder.hidden{opacity:0}
+.chatbox-text{font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--ink);
+  flex:1; border:none; outline:none; background:transparent; padding:8px 12px; margin:0}
+.chatbox-submit{display:flex; align-items:center; justify-content:center; width:40px; height:30px;
+  background:transparent; color:var(--accent); border:none; cursor:default; transition:all .2s ease}
+.chatbox-submit i{font-size:20px}
+.chatbox-submit.flash{animation:iconFlash .5s ease}
+@keyframes iconFlash{0%{color:var(--accent)}50%{color:var(--card)}100%{color:var(--accent)}}
+
 .callout{
   margin:26px 0; padding:22px 24px; border-radius:16px;
   background:linear-gradient(180deg,#fff,#f6efe0); border:1px solid var(--line-2); box-shadow:var(--shadow);
@@ -364,6 +379,17 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
 
 
+    <figure>
+      <div class="chatbox-demo">
+        <div class="chatbox-input-container">
+          <span class="chatbox-placeholder" id="chatboxPlaceholder">Ask me anything</span>
+          <span class="chatbox-text" id="chatboxText"></span>
+          <button class="chatbox-submit" id="chatboxSubmit" disabled>
+            <i class="fa fa-arrow-circle-right" style="font-size:30px"></i>
+          </button>
+        </div>
+      </div>
+    </figure>
     <figure>
       <div class="tokfig">
         <div class="tokfig-out">
@@ -620,14 +646,63 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     });
   }
 
+  // ---- chatbox animation ----
+  function animateChatbox() {
+    var placeholder = document.getElementById("chatboxPlaceholder");
+    var textElement = document.getElementById("chatboxText");
+    var submitButton = document.getElementById("chatboxSubmit");
+
+    if (!placeholder || !textElement || !submitButton) return;
+
+    var question = "What is the oldest city in the world?";
+    var typingSpeed = 80; // ms per character (user preference: slower)
+    var charIndex = 0;
+
+    // After 2 seconds, start typing
+    setTimeout(function() {
+      // Hide placeholder
+      placeholder.classList.add("hidden");
+
+      // Type question character by character
+      var typeInterval = setInterval(function() {
+        if (charIndex < question.length) {
+          textElement.textContent += question.charAt(charIndex);
+          charIndex++;
+        } else {
+          clearInterval(typeInterval);
+
+          // Flash the submit button
+          submitButton.classList.add("flash");
+          setTimeout(function() {
+            submitButton.classList.remove("flash");
+          }, 300);
+        }
+      }, typingSpeed);
+    }, 2000);
+  }
+
   // ---- gentle scroll reveal ----
   if("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
     var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+          // If this is a chapter with chatbox, trigger the animation
+          if(e.target.classList.contains("chapter") && e.target.querySelector(".chatbox-demo")){
+            animateChatbox();
+          }
+        }
+      });
     },{threshold:.12});
     document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
   }else{
     document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});
+    // Trigger chatbox animation for the first chapter if it has a chatbox
+    var firstChapter = document.querySelector(".chapter.reveal");
+    if(firstChapter && firstChapter.querySelector(".chatbox-demo")){
+      animateChatbox();
+    }
   }
 })();
 </script>
