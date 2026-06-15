@@ -250,7 +250,7 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
   padding:7px 11px; border-radius:8px; background:var(--paper); border:1px solid var(--line-2);
   box-shadow:0 1px 0 rgba(0,0,0,.03); display:inline-block; animation:pop .22s ease}
 .tk.piece{background:#eef5f2; border-color:var(--teal-soft); color:#1f5249}
-.tk.punct{background:#fcece9; border-color:var(--accent-soft); color:var(--accent)}
+.tk.punct{background:#FBF5EA; border-color:#DAAF52; color:var(--gold)}
 
 /* chatbox demo animation */
 .chatbox-demo{display:flex; flex-direction:column; gap:20px; padding:26px 26px; border-radius:14px;
@@ -385,10 +385,10 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
 
   <!-- ===================== CHAPTER 1 ===================== -->
-  <section class="chapter reveal">
+  <section class="chapter">
     <h2>What are <span class="em">tokens</span>, and why should you care?</h2>
 
-    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>. These can be anything—from words (teal boxes), subwords (grey boxes), or punctuation (orange boxes) to letters, numbers, or emojis.</p>
+    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>. These can be anything—from <b style="color:#2D7669">words</b>, <b style="color:#5D5746">subwords</b>, or <b style="color:var(--gold)">punctuation</b> to letters, numbers, or emojis.</p>
 
     <figure>
       <div class="chatbox-demo">
@@ -424,7 +424,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       </div>
     </figure>
 
-    <p>Each box above is one token the AI used to write its answer. As you can see, a token can be a whole word (grey boxes) or just a piece of one (teal boxes).</p>
+    <!--<p>Each box above is one token the AI used to write its answer. As you can see, a token can be a whole word (grey boxes) or just a piece of one (teal boxes).</p>-->
 
     <p>When you use an AI, the provider hosting the service charges you for the number of tokens the AI used — a practice called <em><strong>pay-per-token</strong></em>. However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>
 
@@ -742,7 +742,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     // Step 3: Hide and loop
     var promptTime = 2000 + cycle.prompt.length * 80 + 300 + 200;
     var tokenTime = cycle.tokens.length * 300;
-    var totalTime = promptTime + tokenTime + 2000;
+    var totalTime = promptTime + tokenTime + 4000;
 
     setTimeout(function() {
       textElement.textContent = '';
@@ -754,29 +754,26 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     }, totalTime);
   }
 
-  // ---- gentle scroll reveal ----
-  if("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(e){
-        if(e.isIntersecting){
-          e.target.classList.add("in");
-          io.unobserve(e.target);
-          // If this is a chapter with chatbox, trigger the demo cycle
-          if(e.target.classList.contains("chapter") && e.target.querySelector(".chatbox-demo")){
-            animateDemoCycle(0);
-          }
-        }
-      });
-    },{threshold:.12});
-    document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
-  }else{
-    document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});
-    // Trigger demo cycle for the first chapter if it has a chatbox
-    var firstChapter = document.querySelector(".chapter.reveal");
-    if(firstChapter && firstChapter.querySelector(".chatbox-demo")){
-      animateDemoCycle(0);
-    }
-  }
+   // ---- trigger demo animation for first chapter ----
+   var firstChapter = document.querySelector(".chapter");
+   if(firstChapter && firstChapter.querySelector(".chatbox-demo")){
+     animateDemoCycle(0);
+   }
+
+   // ---- gentle scroll reveal ----
+   if("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+     var io=new IntersectionObserver(function(entries){
+       entries.forEach(function(e){
+         if(e.isIntersecting){
+           e.target.classList.add("in");
+           io.unobserve(e.target);
+         }
+       });
+     },{threshold:.12});
+     document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
+   }else{
+     document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});
+   }
 })();
 </script>
 </body>
