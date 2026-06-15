@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Spline+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
 :root{
@@ -331,20 +332,22 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
     <h1 class="title">Is Your LLM <span class="em">Overcharging</span> You?</h1>
 
-    <p class="lede">When you use an AI, you pay for every <b>token</b> it produces. But how do you know <b>how many tokens the AI really used?</b></p>
+    <p class="lede">When you use an AI model, you pay for every <b>token</b> it produces. But how do you know <b>how many tokens the model really produced?</b></p>
 
     <div class="authors">
-      <b>Ander Artola Velasco</b><sup>1</sup> · <b>Stratis Tsirtsis</b><sup>2</sup> · <b>Nastaran Okati</b><sup>3</sup> · <b>Manuel Gomez Rodriguez</b><sup>1</sup>
+      <b><a href="https://anderartola.github.io/">Ander Artola Velasco</a></b><sup>1</sup> · <b><a href="https://stsirtsis.github.io/">Stratis Tsirtsis</a></b><sup>2</sup> · <b><a href="https://nastaran75.github.io/">Nastaran Okati</a></b><sup>3</sup> · <b><a href="https://people.mpi-sws.org/~manuelgr/index.html">Manuel Gomez Rodriguez</a></b><sup>1</sup>
       <div class="affil"><sup>1</sup>MPI for Software Systems · <sup>2</sup>Hasso Plattner Institute · <sup>3</sup>MPI for Intelligent Systems</div>
     </div>
 
     <div class="actions">
       <a class="btn primary" href="https://arxiv.org/abs/2505.21627" id="paperLink">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        <!--<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>-->
+        <i class="fa fa-file" style="font-size:20px"></i>
         Read the paper
       </a>
       <a class="btn" href="https://github.com/Human-Centric-Machine-Learning/token-pricing" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-1.7c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C18.3 4.6 19.3 5 19.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>
+        <!--<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-1.7c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C18.3 4.6 19.3 5 19.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>-->
+        <i class="fa fa-github" style="font-size:24px"></i>
         Code &amp; experiments
       </a>
     </div>
@@ -357,7 +360,9 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   <section class="chapter reveal">
     <h2>What are <span class="em">tokens</span>, and why should you care?</h2>
 
-    <p>Most AI models build their answers out of chunks of text called <em><strong>tokens</strong></em>. Below are two answers an AI might give when you ask it for facts about cities:</p>
+    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>. These can be anything—from words, subwords or even letters to numbers and punctuation.
+
+
 
     <figure>
       <div class="tokfig">
