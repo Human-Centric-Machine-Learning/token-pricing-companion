@@ -14,6 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500;1,9..144,600&family=Spline+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <style>
 :root{
@@ -99,18 +100,18 @@ h1.title{font-size:clamp(40px,7vw,68px); margin:20px 0 0; font-weight:600}
   opacity:.5}
 
 /* ---------- interactive centerpiece ---------- */
-.stage{margin:36px 0 8px}
+.stage{margin:36px 0 30px}
 .stage-card{
   background:linear-gradient(180deg,#fff,#f6efe0);
   border:1px solid var(--line-2); border-radius:20px; padding:30px 28px 26px;
-  box-shadow:var(--shadow-lg); position:relative; overflow:hidden;
+  box-shadow:var(--shadow); position:relative; overflow:hidden;
 }
 .stage-card::before{
   content:""; position:absolute; inset:0 0 auto 0; height:4px;
   background:linear-gradient(90deg,var(--teal),var(--clay),var(--accent));
 }
 .stage-title{font-family:"Fraunces",serif; font-weight:600; font-size:24px; margin:0 0 4px}
-.stage-sub{color:var(--muted); font-size:15.5px; margin:0 0 22px; max-width:54ch}
+.stage-sub{color:var(--muted); font-size:15.5px; margin:0 0 22px}
 
 .tokens{
   display:flex; flex-wrap:wrap; gap:5px 4px; align-items:center;
@@ -176,6 +177,67 @@ input[type=range]:focus-visible{outline:3px solid var(--teal-soft); outline-offs
   padding:3px 9px; border-radius:999px; background:var(--accent); color:#fff7f2; letter-spacing:.04em;
 }
 .overcharge.zero{background:var(--teal)}
+
+/* ---------- provider demo animation ---------- */
+.provider-demo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  padding: 26px;
+  position: relative;
+  margin: 20px 0;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.provider-demo .user-icon,
+.provider-demo .building-icon,
+.provider-demo .rack-icon {
+  height: 64px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.provider-icons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.provider-demo .floating-text {
+  position: absolute;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--paper);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line-2);
+  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  width: 190px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Floating text rests at the left edge, vertically centered; all motion is
+   driven by the Web Animations API in JS (see initAnimations). Anchoring at
+   left:0 lets the JS position it over the user/rack icons responsively. */
+.provider-demo .request,
+.provider-demo .answer { left: 0; top: 50%; transform: translateY(-50%); }
+
+/* the answer text is shorter — give it a slightly narrower box */
+.provider-demo .answer { width: 150px; }
+
+.provider-demo .rack-icon { transform-origin: center; }
 
 .received{
   margin-top:20px; padding:14px 16px; border-left:3px solid var(--clay); background:rgba(201,150,43,.07);
@@ -244,6 +306,34 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
   box-shadow:0 1px 0 rgba(0,0,0,.03)}
 .tokfig .tk.piece{background:#eef5f2; border-color:var(--teal-soft); color:#1f5249}
 
+/* Global token styles for response demo */
+.tk{font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--ink);
+  padding:7px 11px; border-radius:8px; background:var(--paper); border:1px solid var(--line-2);
+  box-shadow:0 1px 0 rgba(0,0,0,.03); display:inline-block; animation:pop .22s ease}
+.tk.piece{background:#eef5f2; border-color:var(--teal-soft); color:#1f5249}
+.tk.punct{background:#FBF5EA; border-color:#DAAF52; color:var(--gold)}
+
+/* chatbox demo animation */
+.chatbox-demo{display:flex; flex-direction:column; gap:20px; padding:26px 26px; border-radius:14px;
+  border:1px solid var(--line); background:var(--card); box-shadow:var(--shadow); margin-bottom:20px}
+.chatbox-input-container{display:flex; align-items:center; position:relative; width:100%; height: 30px}
+.chatbox-placeholder{font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--faint);
+  position:absolute; left:12px; pointer-events:none; transition:opacity .2s ease}
+.chatbox-placeholder.hidden{opacity:0}
+.chatbox-text{font-family:"IBM Plex Mono",monospace; font-size:18px; color:var(--ink);
+  flex:1; border:none; outline:none; background:transparent; padding:8px 12px; margin:0}
+.chatbox-submit{display:flex; align-items:center; justify-content:center; width:40px; height:30px;
+  background:transparent; color:var(--accent); border:none; cursor:default; transition:all .2s ease}
+.chatbox-submit i{font-size:20px}
+.chatbox-submit.flash{animation:iconFlash .5s ease}
+@keyframes iconFlash{0%{color:var(--accent)}50%{color:var(--card)}100%{color:var(--accent)}}
+
+.response-demo{display:flex; flex-direction:column; padding:26px 26px;
+  border-radius:14px; border:1px solid var(--line); background:var(--card);
+  box-shadow:var(--shadow); margin-bottom:20px; min-height:100px; justify-content:center}
+.response-demo .cursor{width:12px;height:22px;background:var(--accent);animation:blink .8s step-end infinite;margin-left:2px;flex-shrink:0;border-radius:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
 .callout{
   margin:26px 0; padding:22px 24px; border-radius:16px;
   background:linear-gradient(180deg,#fff,#f6efe0); border:1px solid var(--line-2); box-shadow:var(--shadow);
@@ -265,6 +355,13 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
   font-family:"Fraunces",serif; font-style:italic; font-weight:500; font-size:clamp(22px,3.4vw,30px);
   line-height:1.32; color:var(--ink); margin:8px 0; padding-left:22px; border-left:3px solid var(--accent);
 }
+
+/* emphasis but not too much emphasis -- used for the question before the slider box*/
+.lead-q{
+  font-family:"Fraunces",serif; font-style:italic; font-weight:500;
+  font-size:clamp(19px,2.2vw,22px); line-height:1.45; color:var(--ink);
+}
+.lead-q b{color:var(--accent); font-weight:600; font-style:normal}
 
 /* theorem / main-result box */
 .theorem{
@@ -290,6 +387,32 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
 .theorem.warn::before{background:linear-gradient(180deg,var(--accent),var(--gold))}
 .theorem.warn .th-label{color:var(--accent)}
 .theorem.warn .th-body b{color:var(--accent)}
+
+/* ---------- objection accordion (skeptical aside) ---------- */
+.objection{
+  margin:22px 0; border-radius:14px; overflow:hidden;
+  border:1px solid var(--accent-soft); background:#fcf2ec; box-shadow:var(--shadow);
+}
+.objection-trigger{
+  display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+  font-family:"Fraunces",serif; font-style:italic; font-weight:500;
+  font-size:clamp(17px,2.4vw,21px); line-height:1.4; color:var(--accent);
+  background:transparent; border:0; cursor:pointer; padding:18px 22px;
+}
+.objection-trigger:hover{background:rgba(177,54,27,.05)}
+.objection-trigger .obj-q{flex:1}
+.objection-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:34px; height:34px; border-radius:9px; flex-shrink:0;
+  background:rgba(177,54,27,.1); color:var(--accent); font-size:16px;
+}
+.objection-chevron{flex-shrink:0; color:var(--accent); font-size:16px; transition:transform .3s ease}
+.objection.open .objection-chevron{transform:rotate(180deg)}
+.objection-reveal{display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s ease}
+.objection.open .objection-reveal{grid-template-rows:1fr}
+.objection-body{overflow:hidden; min-height:0}
+.objection-text{padding:16px 22px 20px; border-top:1px solid var(--accent-soft); color:#433d31; font-size:15.5px}
+.objection-text p{margin:0}
 
 /* ---------- footer ---------- */
 footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
@@ -331,20 +454,23 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
     <h1 class="title">Is Your LLM <span class="em">Overcharging</span> You?</h1>
 
-    <p class="lede">When you use an AI, you pay for every <b>token</b> it produces. But how do you know <b>how many tokens the AI really used?</b></p>
+    <!--<p class="lede">When you use an AI model, you pay for every <b>token</b> it produces. But how do you know <b>how many tokens the model really produced?</b></p>-->
+    <p class="lede">When you use an AI model, the more work it does, the more you pay. But how do you know <b>how much work the model really did?</b></p>
 
     <div class="authors">
-      <b>Ander Artola Velasco</b><sup>1</sup> · <b>Stratis Tsirtsis</b><sup>2</sup> · <b>Nastaran Okati</b><sup>3</sup> · <b>Manuel Gomez Rodriguez</b><sup>1</sup>
+      <b><a href="https://anderartola.github.io/">Ander Artola Velasco</a></b><sup>1</sup> · <b><a href="https://stsirtsis.github.io/">Stratis Tsirtsis</a></b><sup>2</sup> · <b><a href="https://nastaran75.github.io/">Nastaran Okati</a></b><sup>3</sup> · <b><a href="https://people.mpi-sws.org/~manuelgr/index.html">Manuel Gomez Rodriguez</a></b><sup>1</sup>
       <div class="affil"><sup>1</sup>MPI for Software Systems · <sup>2</sup>Hasso Plattner Institute · <sup>3</sup>MPI for Intelligent Systems</div>
     </div>
 
     <div class="actions">
       <a class="btn primary" href="https://arxiv.org/abs/2505.21627" id="paperLink">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+        <!--<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>-->
+        <i class="fa fa-file" style="font-size:20px"></i>
         Read the paper
       </a>
       <a class="btn" href="https://github.com/Human-Centric-Machine-Learning/token-pricing" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-1.7c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C18.3 4.6 19.3 5 19.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>
+        <!--<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.5v-1.7c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C18.3 4.6 19.3 5 19.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.6.8.5A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/></svg>-->
+        <i class="fa fa-github" style="font-size:24px"></i>
         Code &amp; experiments
       </a>
     </div>
@@ -354,45 +480,105 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
 
   <!-- ===================== CHAPTER 1 ===================== -->
-  <section class="chapter reveal">
-    <h2>What are <span class="em">tokens</span>, and why should you care?</h2>
+  <section class="chapter">
+    <!--<h2>What are <span class="em">tokens</span>, and why should you care?</h2>-->
+    <h2><span class="em">Tokens</span>, the currency of modern AI</h2>
 
-    <p>Most AI models build their answers out of chunks of text called <em><strong>tokens</strong></em>. Below are two answers an AI might give when you ask it for facts about cities:</p>
+    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>.</p>
 
     <figure>
+      <div class="chatbox-demo">
+        <div class="chatbox-input-container">
+          <span class="chatbox-placeholder" id="chatboxPlaceholder">Ask me anything</span>
+          <span class="chatbox-text" id="chatboxText"></span>
+          <button class="chatbox-submit" id="chatboxSubmit" disabled>
+            <i class="fa fa-arrow-circle-right" style="font-size:30px"></i>
+          </button>
+        </div>
+      </div>
+    </figure>
+    <figure>
+       <div class="response-demo">
+         <div class="tokfig-row" id="responseTokens"></div>
+         <div class="cursor" id="responseCursor"></div>
+       </div>
+       <figcaption>Tokens can be anything. From <b style="color:#5D5746">words</b>, <b style="color:#2D7669">subwords</b>, or <b style="color:var(--gold)">punctuation</b> to letters, numbers, or emojis.</figcaption>
+    </figure>
+    <figure style="display:none">
       <div class="tokfig">
         <div class="tokfig-out">
           <span class="tokfig-lbl">An answer an AI might write</span>
           <div class="tokfig-row">
-            <span class="tk">The</span><span class="tk">oldest</span><span class="tk">city</span><span class="tk">is</span><span class="tk piece">Dam</span><span class="tk piece">ascus</span><span class="tk">.</span>
+            <span class="tk">The</span><span class="tk">oldest</span><span class="tk">city</span><span class="tk">is</span><span class="tk piece">Dam</span><span class="tk piece">ascus</span><span class="tk punct">.</span>
           </div>
         </div>
         <div class="tokfig-out">
           <span class="tokfig-lbl">Another answer</span>
           <div class="tokfig-row">
-            <span class="tk piece">Tok</span><span class="tk piece">yo</span><span class="tk">is</span><span class="tk piece">un</span><span class="tk piece">bel</span><span class="tk piece">iev</span><span class="tk piece">ably</span><span class="tk">big</span><span class="tk">!</span>
+            <span class="tk piece">Tok</span><span class="tk piece">yo</span><span class="tk">is</span><span class="tk piece">un</span><span class="tk piece">bel</span><span class="tk piece">iev</span><span class="tk piece">ably</span><span class="tk">big</span><span class="tk punct">!</span>
           </div>
         </div>
       </div>
     </figure>
 
-    <p>Each box above is one token the AI used to write its answer. As you can see, a token can be a whole word (grey boxes) or just a piece of one (teal boxes).</p>
+    <!--<p>Each box above is one token the AI used to write its answer. As you can see, a token can be a whole word (grey boxes) or just a piece of one (teal boxes).</p>-->
 
-    <p>When you use an AI, the provider hosting the service charges you for the number of tokens the AI used — a practice called <em><strong>pay-per-token</strong></em>. However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>
+    <p></p>
+    <div class="reveal">
+      <p>The more tokens in the response, the more computational work the model needs to do behind the scenes. And AI computations are heavy! It would be extremely slow to run most of the models you are familiar with on a regular computer. For this reason, when you submit your request, it is sent over the internet to a more powerful computer owned by an AI provider. The model — which lives on their computer — generates the answer token by token, and the provider sends the final answer back to you.
+      </p>
+
+      <div class="provider-demo">
+        <img src="assets/woman.png" class="user-icon" alt="User">
+        <div class="provider-icons">
+          <img src="assets/office-building.png" class="building-icon" alt="AI Provider">
+          <img src="assets/rack.png" class="rack-icon" alt="Server Rack">
+        </div>
+        <span class="floating-text request">What is the oldest city in the world?</span>
+        <span class="floating-text answer">The oldest city is Damascus.</span>
+      </div>
+    </div>
+
+    <!--<p>When you use an AI model, the provider hosting the service charges you for the number of tokens the AI used — a practice called <em><strong>pay-per-token</strong></em>. However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>-->
+    <p>Naturally, the provider wants to get compensated for the computations done by the model to answer your request, since they have to pay for equipment and electricity to run the model. Providers currently do this following a simple <em><strong>pay-per-token</strong></em> billing. The more tokens required to fulfill your request, the more computations, the more money you pay.</p>
+
+    <div class="objection reveal">
+      <button type="button" class="objection-trigger" id="objectionTrigger" aria-expanded="false" aria-controls="objectionBody">
+        <span class="objection-icon" aria-hidden="true"><i class="fa fa-comment-o"></i></span>
+        <span class="obj-q">"But I'm just using it for free, or paying a flat monthly subscription."</span>
+        <i class="fa fa-chevron-down objection-chevron" aria-hidden="true"></i>
+      </button>
+      <div class="objection-reveal">
+        <div class="objection-body" id="objectionBody">
+          <div class="objection-text">
+            <p>
+                Even in those cases, you have certain limits to how much you can use the model — for example, Claude has weekly quotas that get larger as you transition from free to paid plans and increase even further as you pay for a higher tier. <em><strong>In the background, the provider determines whether you reached your quota or not based on how many tokens the model has generated for you.</strong></em> In enterprise, actual bills based on the number of tokens are much more common compared to free or monthly subscription plans.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--<p>However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>-->
+    <p>A key element of how AI models work is that they generate <em>diverse</em> responses to the same question — you can see this for yourself by starting two separate chats with ChatGPT and asking the same question twice. An artifact of this process is that it makes it possible for an AI model to construct an answer using different combinations of tokens (<em><strong>tokenizations</strong></em>) and for the provider to charge you differently depending on the number of generated tokens.</p>
+
+    <p class="lead-q">But if you get a 10-token bill, are you sure that the model generated 10 and not, say, 5 or 7? Did the provider tell you the truth? Or are you being <b>overcharged?</b></p>
+
+    <!--<p>Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>-->
 
 
   <!-- ===================== INTERACTIVE ===================== -->
   <div class="stage reveal">
     <div class="stage-card">
       <h3 class="stage-title">The same answer, different prices</h3>
-      <p class="stage-sub">Every extra token raises the bill — even though the text you receive never changes.</p>
+      <p class="stage-sub">Every extra token raises the bill — even though the text you receive never changes.<sup><a href="#fn1" id="ref1">1</a></sup></p>
 
       <div class="tokens" id="tokens" aria-live="polite"></div>
 
       <div class="ctrl">
         <div class="ctrl-row">
-          <span class="ctrl-label">Additional tokens</span>
-          <span class="ctrl-val" id="sliceVal">honest tokenization</span>
+          <!--<span class="ctrl-label">Additional tokens</span>-->
+          <span class="ctrl-label">Pull the slider</span>
+          <span class="ctrl-val" id="sliceVal">true tokenization</span>
         </div>
         <input type="range" id="slider" min="0" max="21" value="0" step="1" aria-label="Number of extra tokens">
       </div>
@@ -415,19 +601,26 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       <div class="disclose" id="discloseRow">
         <button type="button" class="disclose-btn" id="revealFair">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
-          Reveal the fix!
+          <!--Reveal the fix!-->
+          Show me how to fix this!
         </button>
       </div>
 
     </div>
   </div>
 
+    <!--<p>AI is being integrated into the economy with multi-billion industries gradually incorporating it into their workflows. A handful of providers have been offering AI as a service using pay-per-token billing as the de facto business model. With this work, we aim to make you think critically about this business model. To understand what incentives it creates. And to question if it has to remain like this or if better alternatives exist.</p>-->
+    <p>AI is gradually becoming part of how the economy runs, and a handful of providers offering it as a service are establishing pay-per-token billing as the de facto business model. This work is an invitation to look closely at that model, to see how it leaves users vulnerable to potentially malicious providers, and to ask whether it has to stay this way.</p>
 
-    <p>As AI-as-a-service becomes ever more prevalent, with a whole industry forming around it, we ask the following natural question:</p>
-    <div class="question">
+    <!--<p>As AI-as-a-service becomes ever more prevalent, with a whole industry forming around it, we ask the following natural question:</p>-->
+
+
+
+    <!--I REMOVED THE QUESTION BOX HERE BECAUSE IT FELT LIKE IT REPEATS THE TITLE THAT COMES NEXT-->
+    <!--<div class="question">
       <span class="q-label">We ask:</span>
-      <p class="q-text">Can tokenizations be manipulated to overcharge users by <b>inflating the token count</b> of an AI's answers?</p>
-    </div>
+      <p class="q-text">Can a malicious provider overcharge users by <b>inflating the token count</b> of an AI's answers?</p>
+    </div>-->
 
     <hr class="rule" style="margin-top:48px">
   </section>
@@ -435,16 +628,16 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
   <!-- ===================== CHAPTER 2 ===================== -->
   <section class="chapter reveal">
-    <h2>Can tokenizations be <span class="em">manipulated</span>?</h2>
+    <h2>Can a malicious provider <span class="em">manipulate</span> tokenizations without raising suspicion?</h2>
 
-    <p>Unfortunately, the answer is yes. We present a procedure a malicious provider could use to inflate the tokenizations they report. As the figure below shows, this procedure takes the tokenization the AI produced, picks a token, and splits it into two smaller ones — raising the total count without changing a single character — then repeats this a chosen number of times, <em>m</em>.<sup><a href="#fn2" id="ref2">2</a></sup> Worse still, we show that most tokenizations found this way could have been generated by the AI on its own, so they look perfectly <q>plausible</q> to the user.</p>
+    <p>Unfortunately, the answer is yes. To demonstrate this, we present a very simple procedure a malicious provider could use to inflate the tokenizations they report. As the figure below shows, this procedure takes the tokenization the AI produced, picks a token, and splits it into two smaller ones — raising the total count without changing the actual text — then repeats this a chosen number of times, <em>m</em>.<sup><a href="#fn2" id="ref2">2</a></sup> Worse still, we show that tokenizations found this way are also likely to have been generated by the AI on its own, so they look perfectly <q>plausible</q> to the user.</p>
 
     <figure>
       <img src="figures/misreporting.png" alt="Strategy to manipulate tokenizations by repeatedly splitting one token into two.">
       <figcaption>The process a malicious AI provider could use to overcharge users.</figcaption>
     </figure>
 
-    <p>The figures below show experiments with a real AI (Llama-3.2-1B, an LLM). The first shows how many extra tokens a malicious provider could add by applying the procedure; the second translates those extra tokens into the provider's profit. As you can see, the overcharge can be substantial. The different colors represent how <q>varied</q> the tokens used by the AI are, with the blue lines correspond to more varied tokenizations, which let a malicious provider overcharge more without raising the user's suspicion.</p>
+    <p>The figures below show experiments with a real AI model (Llama-3.2-1B). The first shows how many extra tokens a malicious provider could add by applying the procedure above; the second translates those extra tokens into the provider's profit. As you can see, the overcharge can be substantial. The <b style="color:#F77189">pink</b>, <b style="color:#50B131">green</b>, and <b style="color:#3BA3EC">blue</b> lines correspond to increasing diversity in the outputs of the AI, which makes it easier for a malicious provider to overcharge more without raising the user's suspicion.</p>
 
     <div class="fig-row">
       <figure>
@@ -453,13 +646,13 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       </figure>
       <figure>
         <img src="figures/L1B_profit_1.3.png" alt="The provider's profit gain from manipulating tokenizations, versus their profit margin.">
-        <figcaption>How much extra profit a malicious provider could make, as a function of their profit margin. Llama-3.2-1B, temperature 1.3.</figcaption>
+        <figcaption>How much extra profit a malicious provider could make, as a function of their profit margin per token. Llama-3.2-1B, temperature 1.3.</figcaption>
       </figure>
     </div>
 
     <div class="theorem warn">
       <p class="th-label">Takeaway</p>
-      <p class="th-body">Tokenizations <b>can</b> be manipulated to overcharge users: splitting tokens inflates the count without changing a single character of the text.</p>
+      <p class="th-body">Tokenizations <b>can</b> be manipulated to overcharge users: splitting tokens inflates the token count without changing the answer given to the user.</p>
     </div>
 
   </section>
@@ -471,25 +664,24 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   <section class="chapter reveal">
     <h2>Pay per <span class="em">character</span>, not per token</h2>
 
-    <p>If tokenizations can be manipulated while users pay by the token, is there a better way to price AI — one that leaves nothing to manipulate? There is:<sup><a href="#fn3" id="ref3">3</a></sup></p>
-
-    </p>
+    <p>If paying by the token leaves room for a malicious provider to overcharge users, is there a better way to price AI models — one that simply makes token manipulations unprofitable? There is:<sup><a href="#fn3" id="ref3">3</a></sup></p>
 
     <div class="theorem">
       <p class="th-label">We show that</p>
-      <p class="th-body">The <b>only</b> way to price AI answers that removes any incentive for a provider to overcharge is to bill by the <b>character</b>.</p>
+      <p class="th-body">The <b>only</b> way to price AI answers that removes the incentive of a provider to manipulate tokenizations is to bill by the <b>character</b>.</p>
     </div>
 
-    <p>The intuition is simple: "Damascus" is eight characters no matter how many tokens the provider claims the model used. A character count can't be inflated by re-tokenizing the text, so there is nothing left to game!</p>
+    <!--<p>The intuition is simple: "Damascus" is eight characters no matter how many tokens the provider claims the model used. A character count can't be inflated by re-tokenizing the text, so there is nothing left to game!</p>-->
+    <p>The intuition is surprisingly simple: You receive an answer, you count its characters (letters), you pay based on that count. You don't have to know how the model works, you don't have to know how many tokens have been generated on a computer far far away, and your pocket doesn't depend on you trusting the provider — what you pay depends on what you see. "Damascus" will always be <em><strong>eight</strong></em> letters. Nothing left to game!</p>
 
     <div class="twocol">
       <div class="panel bad">
         <h4>Pay-per-token</h4>
-        <p>The price depends on how the text is encoded, which is a (partly) random process and can be manipulated.</p>
+        <p>The price depends on how the text is encoded, which is a (partly) random process happening on the provider's hardware and can be manipulated.</p>
       </div>
       <div class="panel good">
         <h4>Pay-per-character</h4>
-        <p>The price depends only on the text itself. However you encode it, the count is fixed — there is nothing left to game, removing the incentive to manipulate tokenizations.</p>
+        <p>The price depends only on the text itself. However you encode it, the character count is fixed — there is nothing left to game, removing the incentive to manipulate tokenizations.</p>
       </div>
     </div>
   </section>
@@ -526,6 +718,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       <span>·</span>
       <span>Max Planck Institute for Software Systems</span>
     </div>
+    <p style="margin-top:18px; font-size:13px; color:var(--faint)">Parts of this website have been designed using resources from <a href="https://www.flaticon.com/" target="_blank" rel="noopener">flaticon.com</a>.</p>
   </footer>
 
 </div>
@@ -546,6 +739,38 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   var tokCount  = document.getElementById("tokCount");
   var charCount = document.getElementById("charCount");
   var overcharge= document.getElementById("overcharge");
+
+  // ---- shared async animation helpers ----
+  function prefersReducedMotion(){
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  // Promise that resolves after `ms`, or rejects with AbortError if `signal`
+  // aborts. This is the single timing primitive both demo loops await, so
+  // aborting a loop's controller unwinds the whole chain — no bookkeeping.
+  function delay(ms, signal){
+    return new Promise(function(resolve, reject){
+      if(signal && signal.aborted){ reject(new DOMException("aborted","AbortError")); return; }
+      var id = setTimeout(resolve, ms);
+      if(signal){
+        signal.addEventListener("abort", function(){
+          clearTimeout(id);
+          reject(new DOMException("aborted","AbortError"));
+        }, {once:true});
+      }
+    });
+  }
+
+  // Run a Web Animations API animation, cancelling it if `signal` aborts.
+  // Resolves when the animation finishes (or is cancelled). Uses the default
+  // fill:none so finished animations auto-remove and never accumulate.
+  function runAnim(el, frames, opts, signal){
+    var anim = el.animate(frames, opts);
+    if(signal){
+      signal.addEventListener("abort", function(){ anim.cancel(); }, {once:true});
+    }
+    return anim.finished.catch(function(){});
+  }
 
   slider.max = maxSplits;
   charCount.textContent = baseChars;
@@ -594,7 +819,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       overcharge.classList.remove("zero");
     }
 
-    sliceVal.textContent = (m===0) ? "honest tokenization generated by the AI"
+    sliceVal.textContent = (m===0) ? "true tokenization generated by the AI"
                           : (n===baseChars) ? "every letter billed separately"
                           : m + " extra token" + (m>1?"s":"");
   }
@@ -615,15 +840,285 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     });
   }
 
-  // ---- gentle scroll reveal ----
-  if("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
-    var io=new IntersectionObserver(function(entries){
-      entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
-    },{threshold:.12});
-    document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
-  }else{
-    document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});
+  // ---- objection accordion: toggle the skeptical aside open/closed ----
+  var objection   = document.querySelector(".objection");
+  var objTrigger  = document.getElementById("objectionTrigger");
+  if(objection && objTrigger){
+    objTrigger.addEventListener("click", function(){
+      var open = objection.classList.toggle("open");
+      objTrigger.setAttribute("aria-expanded", open ? "true" : "false");
+    });
   }
+
+  // ---- demo cycle animation ----
+  var demoCycles = [
+    {
+      prompt: "What is the oldest city in the world?",
+      tokens: [
+        {t:"The",c:"tk"},{t:"oldest",c:"tk"},{t:"city",c:"tk"},{t:"is",c:"tk"},
+        {t:"Dam",c:"tk piece"},{t:"ascus",c:"tk piece"},{t:".",c:"tk punct"}
+      ]
+    },
+    {
+      prompt: "How big is Tokyo?",
+      tokens: [
+        {t:"Tok",c:"tk piece"},{t:"yo",c:"tk piece"},{t:"is",c:"tk"},
+        {t:"un",c:"tk piece"},{t:"bel",c:"tk piece"},{t:"iev",c:"tk piece"},
+        {t:"ably",c:"tk piece"},{t:"big",c:"tk"},{t:"!",c:"tk punct"}
+      ]
+    }
+  ];
+
+  // ---- chatbox + response demo (promise-based loop) ----
+  var chatboxText    = document.getElementById("chatboxText");
+  var chatboxPH      = document.getElementById("chatboxPlaceholder");
+  var chatboxSubmit  = document.getElementById("chatboxSubmit");
+  var responseTokens = document.getElementById("responseTokens");
+  var responseCursor = document.getElementById("responseCursor");
+
+  function makeTokenSpan(tok){
+    var span = document.createElement("span");
+    span.className = tok.c;
+    span.textContent = tok.t;
+    return span;
+  }
+
+  // Type `text` into `el` one character at a time. The typing speed lives here
+  // only — nothing else re-derives it (the old code duplicated it in totalTime).
+  async function typeText(el, text, speed, signal){
+    for(var i=0;i<text.length;i++){
+      el.textContent += text.charAt(i);
+      await delay(speed, signal);
+    }
+  }
+
+  // Append response tokens one at a time. The step interval lives here only.
+  async function streamTokens(tokens, container, step, signal){
+    for(var i=0;i<tokens.length;i++){
+      container.appendChild(makeTokenSpan(tokens[i]));
+      await delay(step, signal);
+    }
+  }
+
+  function resetChatbox(){
+    chatboxText.textContent = "";
+    responseTokens.innerHTML = "";
+    chatboxPH.classList.remove("hidden");
+    responseCursor.style.display = "";
+    chatboxSubmit.classList.remove("flash");
+  }
+
+  // Each step's completion drives the next via awaits — no precomputed
+  // totalTime and no timeout/interval bookkeeping. Aborting unwinds the chain.
+  async function chatboxLoop(signal){
+    var i = 0;
+    while(!signal.aborted){
+      var cycle = demoCycles[i];
+      resetChatbox();
+      await delay(2000, signal);
+
+      // Step 1: type the prompt
+      chatboxPH.classList.add("hidden");
+      await typeText(chatboxText, cycle.prompt, 80, signal);
+
+      // Step 2: flash the submit button
+      chatboxSubmit.classList.add("flash");
+      await delay(300, signal);
+      chatboxSubmit.classList.remove("flash");
+
+      // Step 3: stream the response tokens
+      responseCursor.style.display = "none";
+      await delay(300, signal);
+      await streamTokens(cycle.tokens, responseTokens, 300, signal);
+
+      // Step 4: hold, then advance to the next cycle
+      await delay(4000, signal);
+      i = (i + 1) % demoCycles.length;
+    }
+  }
+
+  // Reduced-motion: render one completed cycle statically, no animation.
+  function chatboxStatic(){
+    resetChatbox();
+    var cycle = demoCycles[0];
+    chatboxPH.classList.add("hidden");
+    chatboxText.textContent = cycle.prompt;
+    responseCursor.style.display = "none";
+    cycle.tokens.forEach(function(tok){ responseTokens.appendChild(makeTokenSpan(tok)); });
+  }
+
+  // ---- provider demo (Web Animations API) ----
+  // Single source of truth for timing — no CSS durations to keep in sync.
+  // request and answer share one `travel` duration so both packets, covering
+  // the same distance, move at exactly the same speed.
+  var providerTiming = { travel:3000, wiggle:200, wiggleReps:8, pause:1400, hold:1000 };
+
+  var WIGGLE_FRAMES = [
+    { transform: "translate(0,0)" },
+    { transform: "translate(-2px,-2px)" },
+    { transform: "translate(2px,2px)" },
+    { transform: "translate(2px,-2px)" },
+    { transform: "translate(-2px,2px)" },
+    { transform: "translate(0,0)" }
+  ];
+
+  function providerEls(){
+    var demo = document.querySelector(".provider-demo");
+    if(!demo) return null;
+    return {
+      demo:     demo,
+      request:  demo.querySelector(".request"),
+      answer:   demo.querySelector(".answer"),
+      rack:     demo.querySelector(".rack-icon"),
+      building: demo.querySelector(".building-icon"),
+      user:     demo.querySelector(".user-icon")
+    };
+  }
+
+  // Horizontal offsets (relative to the demo box) of the user, building, and
+  // rack icon centers, recomputed each cycle so the floating text tracks the
+  // icons on resize. Replaces the old hardcoded left:20%/80%. Falls back to
+  // sensible fractions if the icons haven't laid out yet (images still loading).
+  function providerTravel(els){
+    var d = els.demo.getBoundingClientRect();
+    var u = els.user.getBoundingClientRect();
+    var b = els.building.getBoundingClientRect();
+    var r = els.rack.getBoundingClientRect();
+    return {
+      user:      u.width ? (u.left + u.right) / 2 - d.left : d.width * 0.12,
+      userRight: u.width ? u.right - d.left : d.width * 0.20,
+      building:  b.width ? (b.left + b.right) / 2 - d.left : d.width * 0.74,
+      rack:      r.width ? (r.left + r.right) / 2 - d.left : d.width * 0.88
+    };
+  }
+
+  // Center the floating text on x (and vertically, matching the CSS top:50%).
+  function at(x){
+    return "translate(" + x + "px, -50%) translateX(-50%)";
+  }
+
+  // Resting x-offset for the request packet: just to the right of the user icon
+  // (its left edge meeting the icon's right edge) instead of centred over it.
+  function requestRest(els, t){
+    return t.userRight + els.request.getBoundingClientRect().width / 2;
+  }
+
+  // Send a packet from x-offset `from` to `to`, travelling `duration` ms: fade
+  // in quickly, travel at a steady (linear) pace, and only fade out over the
+  // final stretch — so it stays solid for most of the trip instead of vanishing
+  // by the midpoint. If `holdMs` is given, the packet first fades in at `from`
+  // and rests there for holdMs before it starts travelling — one continuous
+  // animation, so there's no flicker between resting and moving.
+  function fly(el, from, to, duration, signal, holdMs){
+    if(!holdMs){
+      return runAnim(el,
+        [
+          { transform: at(from), opacity: 0, offset: 0 },
+          { opacity: 1, offset: 0.15 },
+          { opacity: 1, offset: 0.78 },
+          { transform: at(to), opacity: 0, offset: 1 }
+        ],
+        { duration: duration, easing: "linear" }, signal);
+    }
+    var total = holdMs + duration;
+    var hf = holdMs / total;                 // share of the timeline spent resting
+    var solidUntil = hf + (1 - hf) * 0.78;   // stay opaque through most of the trip
+    return runAnim(el,
+      [
+        { transform: at(from), opacity: 0, offset: 0 },
+        { transform: at(from), opacity: 1, offset: hf * 0.3 },
+        { transform: at(from), opacity: 1, offset: hf },
+        { opacity: 1, offset: solidUntil },
+        { transform: at(to), opacity: 0, offset: 1 }
+      ],
+      { duration: total, easing: "linear" }, signal);
+  }
+
+  async function providerLoop(els, signal){
+    while(!signal.aborted){
+      var t = providerTravel(els);
+
+      // Request: rest to the right of the user for `hold` ms, then travel -> rack.
+      await fly(els.request, requestRest(els, t), t.rack, providerTiming.travel, signal, providerTiming.hold);
+
+      // Server crunches the request
+      await runAnim(els.rack, WIGGLE_FRAMES,
+        { duration: providerTiming.wiggle, iterations: providerTiming.wiggleReps, easing: "ease-in-out" }, signal);
+
+      // Answer: materialise at the building, rest there for `hold` ms, then
+      // travel building -> user.
+      await fly(els.answer, t.building, t.user, providerTiming.travel, signal, providerTiming.hold);
+
+      await delay(providerTiming.pause, signal);
+    }
+  }
+
+  // Reduced-motion: park the request to the right of the user and the answer over the building.
+  function providerStatic(els){
+    var t = providerTravel(els);
+    els.request.style.transform = at(requestRest(els, t));
+    els.answer.style.transform = at(t.building);
+    els.request.style.opacity = "1";
+    els.answer.style.opacity = "1";
+  }
+
+  // ---- unified lifecycle for both looping demos ----
+  var pEls = providerEls();
+  var hasChatbox = !!(chatboxText && chatboxPH && chatboxSubmit && responseTokens && responseCursor);
+  var chatboxAbort = null;
+  var providerAbort = null;
+
+  function startAnimations(){
+    if(hasChatbox){
+      chatboxAbort = new AbortController();
+      chatboxLoop(chatboxAbort.signal).catch(function(){});
+    }
+    if(pEls){
+      providerAbort = new AbortController();
+      providerLoop(pEls, providerAbort.signal).catch(function(){});
+    }
+  }
+
+  function stopAnimations(){
+    if(chatboxAbort){ chatboxAbort.abort(); chatboxAbort = null; }
+    if(providerAbort){ providerAbort.abort(); providerAbort = null; }
+  }
+
+  function initAnimations(){
+    if(prefersReducedMotion()){
+      if(hasChatbox) chatboxStatic();
+      if(pEls) providerStatic(pEls);
+      return;
+    }
+    startAnimations();
+    // Pause when the tab is hidden, restart cleanly when it returns — replaces
+    // the old chatbox-only restart and gives the provider demo real cleanup.
+    document.addEventListener("visibilitychange", function(){
+      stopAnimations();
+      if(document.visibilityState === "visible") startAnimations();
+    });
+  }
+
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", initAnimations);
+  } else {
+    initAnimations();
+  }
+
+   // ---- gentle scroll reveal ----
+   if("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
+     var io=new IntersectionObserver(function(entries){
+       entries.forEach(function(e){
+         if(e.isIntersecting){
+           e.target.classList.add("in");
+           io.unobserve(e.target);
+         }
+       });
+     },{threshold:.12});
+     document.querySelectorAll(".reveal").forEach(function(el){io.observe(el);});
+   }else{
+     document.querySelectorAll(".reveal").forEach(function(el){el.classList.add("in");});
+   }
 })();
 </script>
 </body>
