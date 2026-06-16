@@ -664,25 +664,24 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   <section class="chapter reveal">
     <h2>Pay per <span class="em">character</span>, not per token</h2>
 
-    <p>If tokenizations can be manipulated while users pay by the token, is there a better way to price AI — one that leaves nothing to manipulate? There is:<sup><a href="#fn3" id="ref3">3</a></sup></p>
-
-    </p>
+    <p>If paying by the token leaves room for a malicious provider to overcharge users, is there a better way to price AI models — one that simply makes token manipulations unprofitable? There is:<sup><a href="#fn3" id="ref3">3</a></sup></p>
 
     <div class="theorem">
       <p class="th-label">We show that</p>
-      <p class="th-body">The <b>only</b> way to price AI answers that removes any incentive for a provider to overcharge is to bill by the <b>character</b>.</p>
+      <p class="th-body">The <b>only</b> way to price AI answers that removes the incentive of a provider to manipulate tokenizations is to bill by the <b>character</b>.</p>
     </div>
 
-    <p>The intuition is simple: "Damascus" is eight characters no matter how many tokens the provider claims the model used. A character count can't be inflated by re-tokenizing the text, so there is nothing left to game!</p>
+    <!--<p>The intuition is simple: "Damascus" is eight characters no matter how many tokens the provider claims the model used. A character count can't be inflated by re-tokenizing the text, so there is nothing left to game!</p>-->
+    <p>The intuition is surprisingly simple: You receive an answer, you count its characters (letters), you pay based on that count. You don't have to know how the model works, you don't have to know how many tokens have been generated on a computer far far away, and your pocket doesn't depend on you trusting the provider — what you pay depends on what you see. "Damascus" will always be <em><strong>eight</strong></em> letters. Nothing left to game!</p>
 
     <div class="twocol">
       <div class="panel bad">
         <h4>Pay-per-token</h4>
-        <p>The price depends on how the text is encoded, which is a (partly) random process and can be manipulated.</p>
+        <p>The price depends on how the text is encoded, which is a (partly) random process happening on the provider's hardware and can be manipulated.</p>
       </div>
       <div class="panel good">
         <h4>Pay-per-character</h4>
-        <p>The price depends only on the text itself. However you encode it, the count is fixed — there is nothing left to game, removing the incentive to manipulate tokenizations.</p>
+        <p>The price depends only on the text itself. However you encode it, the character count is fixed — there is nothing left to game, removing the incentive to manipulate tokenizations.</p>
       </div>
     </div>
   </section>
