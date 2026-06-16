@@ -100,18 +100,18 @@ h1.title{font-size:clamp(40px,7vw,68px); margin:20px 0 0; font-weight:600}
   opacity:.5}
 
 /* ---------- interactive centerpiece ---------- */
-.stage{margin:36px 0 8px}
+.stage{margin:36px 0 30px}
 .stage-card{
   background:linear-gradient(180deg,#fff,#f6efe0);
   border:1px solid var(--line-2); border-radius:20px; padding:30px 28px 26px;
-  box-shadow:var(--shadow-lg); position:relative; overflow:hidden;
+  box-shadow:var(--shadow); position:relative; overflow:hidden;
 }
 .stage-card::before{
   content:""; position:absolute; inset:0 0 auto 0; height:4px;
   background:linear-gradient(90deg,var(--teal),var(--clay),var(--accent));
 }
 .stage-title{font-family:"Fraunces",serif; font-weight:600; font-size:24px; margin:0 0 4px}
-.stage-sub{color:var(--muted); font-size:15.5px; margin:0 0 22px; max-width:54ch}
+.stage-sub{color:var(--muted); font-size:15.5px; margin:0 0 22px}
 
 .tokens{
   display:flex; flex-wrap:wrap; gap:5px 4px; align-items:center;
@@ -177,6 +177,67 @@ input[type=range]:focus-visible{outline:3px solid var(--teal-soft); outline-offs
   padding:3px 9px; border-radius:999px; background:var(--accent); color:#fff7f2; letter-spacing:.04em;
 }
 .overcharge.zero{background:var(--teal)}
+
+/* ---------- provider demo animation ---------- */
+.provider-demo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--card);
+  box-shadow: var(--shadow);
+  padding: 26px;
+  position: relative;
+  margin: 20px 0;
+  min-height: 200px;
+  overflow: hidden;
+}
+
+.provider-demo .user-icon,
+.provider-demo .building-icon,
+.provider-demo .rack-icon {
+  height: 64px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.provider-icons {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.provider-demo .floating-text {
+  position: absolute;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--paper);
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--line-2);
+  box-shadow: 0 1px 0 rgba(0,0,0,.03);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  width: 190px;
+  white-space: normal;
+  text-align: center;
+  line-height: 1.4;
+}
+
+/* Floating text rests at the left edge, vertically centered; all motion is
+   driven by the Web Animations API in JS (see initAnimations). Anchoring at
+   left:0 lets the JS position it over the user/rack icons responsively. */
+.provider-demo .request,
+.provider-demo .answer { left: 0; top: 50%; transform: translateY(-50%); }
+
+/* the answer text is shorter — give it a slightly narrower box */
+.provider-demo .answer { width: 150px; }
+
+.provider-demo .rack-icon { transform-origin: center; }
 
 .received{
   margin-top:20px; padding:14px 16px; border-left:3px solid var(--clay); background:rgba(201,150,43,.07);
@@ -267,10 +328,10 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
 .chatbox-submit.flash{animation:iconFlash .5s ease}
 @keyframes iconFlash{0%{color:var(--accent)}50%{color:var(--card)}100%{color:var(--accent)}}
 
-.response-demo{display:flex; flex-direction:column; gap:20px; padding:26px 26px;
+.response-demo{display:flex; flex-direction:column; padding:26px 26px;
   border-radius:14px; border:1px solid var(--line); background:var(--card);
-  box-shadow:var(--shadow); margin-bottom:20px; height:100px; overflow:hidden; justify-content:center}
-.response-demo .cursor{width:12px;height:22px;background:var(--accent);animation:blink .8s step-end infinite;margin-left:2px;margin-bottom:13px;flex-shrink:0;border-radius:2px}
+  box-shadow:var(--shadow); margin-bottom:20px; min-height:100px; justify-content:center}
+.response-demo .cursor{width:12px;height:22px;background:var(--accent);animation:blink .8s step-end infinite;margin-left:2px;flex-shrink:0;border-radius:2px}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
 .callout{
@@ -360,7 +421,8 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
     <h1 class="title">Is Your LLM <span class="em">Overcharging</span> You?</h1>
 
-    <p class="lede">When you use an AI model, you pay for every <b>token</b> it produces. But how do you know <b>how many tokens the model really produced?</b></p>
+    <!--<p class="lede">When you use an AI model, you pay for every <b>token</b> it produces. But how do you know <b>how many tokens the model really produced?</b></p>-->
+    <p class="lede">When you use an AI model, the more work it does, the more you pay. But how do you know <b>how much work the model really did?</b></p>
 
     <div class="authors">
       <b><a href="https://anderartola.github.io/">Ander Artola Velasco</a></b><sup>1</sup> · <b><a href="https://stsirtsis.github.io/">Stratis Tsirtsis</a></b><sup>2</sup> · <b><a href="https://nastaran75.github.io/">Nastaran Okati</a></b><sup>3</sup> · <b><a href="https://people.mpi-sws.org/~manuelgr/index.html">Manuel Gomez Rodriguez</a></b><sup>1</sup>
@@ -386,9 +448,10 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
   <!-- ===================== CHAPTER 1 ===================== -->
   <section class="chapter">
-    <h2>What are <span class="em">tokens</span>, and why should you care?</h2>
+    <!--<h2>What are <span class="em">tokens</span>, and why should you care?</h2>-->
+    <h2><span class="em">Tokens</span>, the currency of modern AI</h2>
 
-    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>. These can be anything—from <b style="color:#5D5746">words</b>, <b style="color:#2D7669">subwords</b>, or <b style="color:var(--gold)">punctuation</b> to letters, numbers, or emojis.</p>
+    <p>From simple chatbots like ChatGPT to advanced coding agents like Claude Code, most AI models essentially do the same thing: they generate text that answers your request. To build their answers, they use small chunks of text called <em><strong>tokens</strong></em>.</p>
 
     <figure>
       <div class="chatbox-demo">
@@ -406,6 +469,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
          <div class="tokfig-row" id="responseTokens"></div>
          <div class="cursor" id="responseCursor"></div>
        </div>
+       <figcaption>Tokens can be anything. From <b style="color:#5D5746">words</b>, <b style="color:#2D7669">subwords</b>, or <b style="color:var(--gold)">punctuation</b> to letters, numbers, or emojis.</figcaption>
     </figure>
     <figure style="display:none">
       <div class="tokfig">
@@ -426,10 +490,21 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
     <!--<p>Each box above is one token the AI used to write its answer. As you can see, a token can be a whole word (grey boxes) or just a piece of one (teal boxes).</p>-->
 
-    <p>To answer your request, the AI needs to do some work behind the scenes. To put it simply, more tokens mean more computational work. And these computations are heavy! It would be really slow (like really really slow) to run the best models out there on a regular computer. For this reason, when you submit your request, it is sent over the internet to a more powerful computer owned by the AI provider. The model runs on this computer, generates the answer token by token, and the provider sends the result back to you.
-    </p>
+    <p></p>
+    <div class="reveal">
+      <p>To answer your request, the AI needs to do some work behind the scenes. To put it simply, more tokens mean more computational work. And these computations are heavy! It would be very slow (like really really slow) to run the best models out there on a regular computer. For this reason, when you submit your request, it is sent over the internet to a more powerful computer owned by an AI provider. The model runs on their computer, generates the answer token by token, and the provider sends the final answer back to you.
+      </p>
 
-    <!--TODO: add gif with prompt-response sent to the provider-->
+      <div class="provider-demo">
+        <img src="assets/woman.png" class="user-icon" alt="User">
+        <div class="provider-icons">
+          <img src="assets/office-building.png" class="building-icon" alt="AI Provider">
+          <img src="assets/rack.png" class="rack-icon" alt="Server Rack">
+        </div>
+        <span class="floating-text request">What is the oldest city in the world?</span>
+        <span class="floating-text answer">The oldest city is Damascus.</span>
+      </div>
+    </div>
 
     <!--<p>When you use an AI model, the provider hosting the service charges you for the number of tokens the AI used — a practice called <em><strong>pay-per-token</strong></em>. However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>-->
 
@@ -600,9 +675,37 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
   var charCount = document.getElementById("charCount");
   var overcharge= document.getElementById("overcharge");
 
-  // Track active intervals and timeouts for cleanup
-  var activeIntervals = [];
-  var activeTimeouts = [];
+  // ---- shared async animation helpers ----
+  function prefersReducedMotion(){
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }
+
+  // Promise that resolves after `ms`, or rejects with AbortError if `signal`
+  // aborts. This is the single timing primitive both demo loops await, so
+  // aborting a loop's controller unwinds the whole chain — no bookkeeping.
+  function delay(ms, signal){
+    return new Promise(function(resolve, reject){
+      if(signal && signal.aborted){ reject(new DOMException("aborted","AbortError")); return; }
+      var id = setTimeout(resolve, ms);
+      if(signal){
+        signal.addEventListener("abort", function(){
+          clearTimeout(id);
+          reject(new DOMException("aborted","AbortError"));
+        }, {once:true});
+      }
+    });
+  }
+
+  // Run a Web Animations API animation, cancelling it if `signal` aborts.
+  // Resolves when the animation finishes (or is cancelled). Uses the default
+  // fill:none so finished animations auto-remove and never accumulate.
+  function runAnim(el, frames, opts, signal){
+    var anim = el.animate(frames, opts);
+    if(signal){
+      signal.addEventListener("abort", function(){ anim.cancel(); }, {once:true});
+    }
+    return anim.finished.catch(function(){});
+  }
 
   slider.max = maxSplits;
   charCount.textContent = baseChars;
@@ -691,135 +794,241 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     }
   ];
 
-  function typeText(element, text, speed, callback) {
-    var index = 0;
-    var interval = setInterval(function() {
-      if (index < text.length) {
-        element.textContent += text.charAt(index);
-        index++;
-      } else {
-        clearInterval(interval);
-        // Remove from active intervals
-        var idx = activeIntervals.indexOf(interval);
-        if (idx > -1) activeIntervals.splice(idx, 1);
-        if (callback) callback();
-      }
-    }, speed);
-    activeIntervals.push(interval);
-    return interval;
+  // ---- chatbox + response demo (promise-based loop) ----
+  var chatboxText    = document.getElementById("chatboxText");
+  var chatboxPH      = document.getElementById("chatboxPlaceholder");
+  var chatboxSubmit  = document.getElementById("chatboxSubmit");
+  var responseTokens = document.getElementById("responseTokens");
+  var responseCursor = document.getElementById("responseCursor");
+
+  function makeTokenSpan(tok){
+    var span = document.createElement("span");
+    span.className = tok.c;
+    span.textContent = tok.t;
+    return span;
   }
 
-  function animateTokens(tokens, idx, container) {
-    if (idx >= tokens.length) return;
-    var span = document.createElement('span');
-    span.className = tokens[idx].c;
-    span.textContent = tokens[idx].t;
-    container.appendChild(span);
-    var timeoutId = setTimeout(function() { animateTokens(tokens, idx + 1, container); }, 300);
-    activeTimeouts.push(timeoutId);
+  // Type `text` into `el` one character at a time. The typing speed lives here
+  // only — nothing else re-derives it (the old code duplicated it in totalTime).
+  async function typeText(el, text, speed, signal){
+    for(var i=0;i<text.length;i++){
+      el.textContent += text.charAt(i);
+      await delay(speed, signal);
+    }
   }
 
-  function animateDemoCycle(cycleIndex) {
-    var chatboxDemo = document.querySelector('.chatbox-demo');
-    var responseDemo = document.querySelector('.response-demo');
-    var placeholder = document.getElementById("chatboxPlaceholder");
-    var textElement = document.getElementById("chatboxText");
-    var submitButton = document.getElementById("chatboxSubmit");
-    var responseTokens = document.getElementById("responseTokens");
-
-    if (!chatboxDemo || !responseDemo || !placeholder || !textElement ||
-        !submitButton || !responseTokens) return;
-
-    var cursorEl = document.getElementById("responseCursor");
-
-    var cycle = demoCycles[cycleIndex];
-
-    // Reset content
-    textElement.textContent = '';
-    responseTokens.innerHTML = '';
-    placeholder.classList.remove('hidden');
-    cursorEl.style.display = '';
-
-    // Step 1: Type prompt
-    var t1 = setTimeout(function() {
-      placeholder.classList.add('hidden');
-      typeText(textElement, cycle.prompt, 80, function() {
-        submitButton.classList.add('flash');
-        var t2 = setTimeout(function() {
-          submitButton.classList.remove('flash');
-          // Step 2: Animate response tokens
-          cursorEl.style.display = 'none';
-          var t3 = setTimeout(function() { animateTokens(cycle.tokens, 0, responseTokens); }, 300);
-          activeTimeouts.push(t3);
-        }, 300);
-        activeTimeouts.push(t2);
-      });
-    }, 2000);
-    activeTimeouts.push(t1);
-
-    // Step 3: Hide and loop
-    var promptTime = 2000 + cycle.prompt.length * 80 + 300 + 200;
-    var tokenTime = cycle.tokens.length * 300;
-    var totalTime = promptTime + tokenTime + 4000;
-
-    var t4 = setTimeout(function() {
-      textElement.textContent = '';
-      responseTokens.innerHTML = '';
-      placeholder.classList.remove('hidden');
-      cursorEl.style.display = '';
-      var nextIndex = (cycleIndex + 1) % demoCycles.length;
-      var t5 = setTimeout(function() { animateDemoCycle(nextIndex); }, 500);
-      activeTimeouts.push(t5);
-    }, totalTime);
-    activeTimeouts.push(t4);
+  // Append response tokens one at a time. The step interval lives here only.
+  async function streamTokens(tokens, container, step, signal){
+    for(var i=0;i<tokens.length;i++){
+      container.appendChild(makeTokenSpan(tokens[i]));
+      await delay(step, signal);
+    }
   }
 
-   // ---- animation cleanup ----
-  function clearAllAnimations() {
-    // Clear all active intervals
-    activeIntervals.forEach(function(interval) {
-      clearInterval(interval);
+  function resetChatbox(){
+    chatboxText.textContent = "";
+    responseTokens.innerHTML = "";
+    chatboxPH.classList.remove("hidden");
+    responseCursor.style.display = "";
+    chatboxSubmit.classList.remove("flash");
+  }
+
+  // Each step's completion drives the next via awaits — no precomputed
+  // totalTime and no timeout/interval bookkeeping. Aborting unwinds the chain.
+  async function chatboxLoop(signal){
+    var i = 0;
+    while(!signal.aborted){
+      var cycle = demoCycles[i];
+      resetChatbox();
+      await delay(2000, signal);
+
+      // Step 1: type the prompt
+      chatboxPH.classList.add("hidden");
+      await typeText(chatboxText, cycle.prompt, 80, signal);
+
+      // Step 2: flash the submit button
+      chatboxSubmit.classList.add("flash");
+      await delay(300, signal);
+      chatboxSubmit.classList.remove("flash");
+
+      // Step 3: stream the response tokens
+      responseCursor.style.display = "none";
+      await delay(300, signal);
+      await streamTokens(cycle.tokens, responseTokens, 300, signal);
+
+      // Step 4: hold, then advance to the next cycle
+      await delay(4000, signal);
+      i = (i + 1) % demoCycles.length;
+    }
+  }
+
+  // Reduced-motion: render one completed cycle statically, no animation.
+  function chatboxStatic(){
+    resetChatbox();
+    var cycle = demoCycles[0];
+    chatboxPH.classList.add("hidden");
+    chatboxText.textContent = cycle.prompt;
+    responseCursor.style.display = "none";
+    cycle.tokens.forEach(function(tok){ responseTokens.appendChild(makeTokenSpan(tok)); });
+  }
+
+  // ---- provider demo (Web Animations API) ----
+  // Single source of truth for timing — no CSS durations to keep in sync.
+  // request and answer share one `travel` duration so both packets, covering
+  // the same distance, move at exactly the same speed.
+  var providerTiming = { travel:3000, wiggle:200, wiggleReps:8, pause:1400, hold:1000 };
+
+  var WIGGLE_FRAMES = [
+    { transform: "translate(0,0)" },
+    { transform: "translate(-2px,-2px)" },
+    { transform: "translate(2px,2px)" },
+    { transform: "translate(2px,-2px)" },
+    { transform: "translate(-2px,2px)" },
+    { transform: "translate(0,0)" }
+  ];
+
+  function providerEls(){
+    var demo = document.querySelector(".provider-demo");
+    if(!demo) return null;
+    return {
+      demo:     demo,
+      request:  demo.querySelector(".request"),
+      answer:   demo.querySelector(".answer"),
+      rack:     demo.querySelector(".rack-icon"),
+      building: demo.querySelector(".building-icon"),
+      user:     demo.querySelector(".user-icon")
+    };
+  }
+
+  // Horizontal offsets (relative to the demo box) of the user, building, and
+  // rack icon centers, recomputed each cycle so the floating text tracks the
+  // icons on resize. Replaces the old hardcoded left:20%/80%. Falls back to
+  // sensible fractions if the icons haven't laid out yet (images still loading).
+  function providerTravel(els){
+    var d = els.demo.getBoundingClientRect();
+    var u = els.user.getBoundingClientRect();
+    var b = els.building.getBoundingClientRect();
+    var r = els.rack.getBoundingClientRect();
+    return {
+      user:      u.width ? (u.left + u.right) / 2 - d.left : d.width * 0.12,
+      userRight: u.width ? u.right - d.left : d.width * 0.20,
+      building:  b.width ? (b.left + b.right) / 2 - d.left : d.width * 0.74,
+      rack:      r.width ? (r.left + r.right) / 2 - d.left : d.width * 0.88
+    };
+  }
+
+  // Center the floating text on x (and vertically, matching the CSS top:50%).
+  function at(x){
+    return "translate(" + x + "px, -50%) translateX(-50%)";
+  }
+
+  // Resting x-offset for the request packet: just to the right of the user icon
+  // (its left edge meeting the icon's right edge) instead of centred over it.
+  function requestRest(els, t){
+    return t.userRight + els.request.getBoundingClientRect().width / 2;
+  }
+
+  // Send a packet from x-offset `from` to `to`, travelling `duration` ms: fade
+  // in quickly, travel at a steady (linear) pace, and only fade out over the
+  // final stretch — so it stays solid for most of the trip instead of vanishing
+  // by the midpoint. If `holdMs` is given, the packet first fades in at `from`
+  // and rests there for holdMs before it starts travelling — one continuous
+  // animation, so there's no flicker between resting and moving.
+  function fly(el, from, to, duration, signal, holdMs){
+    if(!holdMs){
+      return runAnim(el,
+        [
+          { transform: at(from), opacity: 0, offset: 0 },
+          { opacity: 1, offset: 0.15 },
+          { opacity: 1, offset: 0.78 },
+          { transform: at(to), opacity: 0, offset: 1 }
+        ],
+        { duration: duration, easing: "linear" }, signal);
+    }
+    var total = holdMs + duration;
+    var hf = holdMs / total;                 // share of the timeline spent resting
+    var solidUntil = hf + (1 - hf) * 0.78;   // stay opaque through most of the trip
+    return runAnim(el,
+      [
+        { transform: at(from), opacity: 0, offset: 0 },
+        { transform: at(from), opacity: 1, offset: hf * 0.3 },
+        { transform: at(from), opacity: 1, offset: hf },
+        { opacity: 1, offset: solidUntil },
+        { transform: at(to), opacity: 0, offset: 1 }
+      ],
+      { duration: total, easing: "linear" }, signal);
+  }
+
+  async function providerLoop(els, signal){
+    while(!signal.aborted){
+      var t = providerTravel(els);
+
+      // Request: rest to the right of the user for `hold` ms, then travel -> rack.
+      await fly(els.request, requestRest(els, t), t.rack, providerTiming.travel, signal, providerTiming.hold);
+
+      // Server crunches the request
+      await runAnim(els.rack, WIGGLE_FRAMES,
+        { duration: providerTiming.wiggle, iterations: providerTiming.wiggleReps, easing: "ease-in-out" }, signal);
+
+      // Answer: materialise at the rack, rest there for `hold` ms, then travel
+      // rack -> user. Same distance and speed as the request.
+      await fly(els.answer, t.rack, t.user, providerTiming.travel, signal, providerTiming.hold);
+
+      await delay(providerTiming.pause, signal);
+    }
+  }
+
+  // Reduced-motion: park the request to the right of the user and the answer over the rack.
+  function providerStatic(els){
+    var t = providerTravel(els);
+    els.request.style.transform = at(requestRest(els, t));
+    els.answer.style.transform = at(t.rack);
+    els.request.style.opacity = "1";
+    els.answer.style.opacity = "1";
+  }
+
+  // ---- unified lifecycle for both looping demos ----
+  var pEls = providerEls();
+  var hasChatbox = !!(chatboxText && chatboxPH && chatboxSubmit && responseTokens && responseCursor);
+  var chatboxAbort = null;
+  var providerAbort = null;
+
+  function startAnimations(){
+    if(hasChatbox){
+      chatboxAbort = new AbortController();
+      chatboxLoop(chatboxAbort.signal).catch(function(){});
+    }
+    if(pEls){
+      providerAbort = new AbortController();
+      providerLoop(pEls, providerAbort.signal).catch(function(){});
+    }
+  }
+
+  function stopAnimations(){
+    if(chatboxAbort){ chatboxAbort.abort(); chatboxAbort = null; }
+    if(providerAbort){ providerAbort.abort(); providerAbort = null; }
+  }
+
+  function initAnimations(){
+    if(prefersReducedMotion()){
+      if(hasChatbox) chatboxStatic();
+      if(pEls) providerStatic(pEls);
+      return;
+    }
+    startAnimations();
+    // Pause when the tab is hidden, restart cleanly when it returns — replaces
+    // the old chatbox-only restart and gives the provider demo real cleanup.
+    document.addEventListener("visibilitychange", function(){
+      stopAnimations();
+      if(document.visibilityState === "visible") startAnimations();
     });
-    activeIntervals = [];
-
-    // Clear all active timeouts
-    activeTimeouts.forEach(function(timeout) {
-      clearTimeout(timeout);
-    });
-    activeTimeouts = [];
   }
 
-  // ---- trigger demo animation for first chapter ----
-   var firstChapter = document.querySelector(".chapter");
-   if(firstChapter && firstChapter.querySelector(".chatbox-demo")){
-     // Reset animation state and start fresh
-     function startDemoAnimation() {
-       // Clear all pending animations
-       clearAllAnimations();
-
-       // Reset DOM elements
-       var textElement = document.getElementById("chatboxText");
-       var responseTokens = document.getElementById("responseTokens");
-       var placeholder = document.getElementById("chatboxPlaceholder");
-       var cursorEl = document.getElementById("responseCursor");
-
-       if (textElement) textElement.textContent = '';
-       if (responseTokens) responseTokens.innerHTML = '';
-       if (placeholder) placeholder.classList.remove('hidden');
-       if (cursorEl) cursorEl.style.display = '';
-
-       animateDemoCycle(0);
-     }
-
-     startDemoAnimation();
-
-     // Restart animation when user switches back to the tab
-     document.addEventListener("visibilitychange", function() {
-       if (document.visibilityState === "visible") {
-         startDemoAnimation();
-       }
-     });
-   }
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", initAnimations);
+  } else {
+    initAnimations();
+  }
 
    // ---- gentle scroll reveal ----
    if("IntersectionObserver" in window && !window.matchMedia("(prefers-reduced-motion: reduce)").matches){
