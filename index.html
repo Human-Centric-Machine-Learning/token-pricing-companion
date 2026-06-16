@@ -381,6 +381,32 @@ figcaption{font-size:14px; color:var(--muted); margin-top:10px; font-style:itali
 .theorem.warn .th-label{color:var(--accent)}
 .theorem.warn .th-body b{color:var(--accent)}
 
+/* ---------- objection accordion (skeptical aside) ---------- */
+.objection{
+  margin:22px 0; border-radius:14px; overflow:hidden;
+  border:1px solid var(--accent-soft); background:#fcf2ec; box-shadow:var(--shadow);
+}
+.objection-trigger{
+  display:flex; align-items:center; gap:14px; width:100%; text-align:left;
+  font-family:"Fraunces",serif; font-style:italic; font-weight:500;
+  font-size:clamp(17px,2.4vw,21px); line-height:1.4; color:var(--accent);
+  background:transparent; border:0; cursor:pointer; padding:18px 22px;
+}
+.objection-trigger:hover{background:rgba(177,54,27,.05)}
+.objection-trigger .obj-q{flex:1}
+.objection-icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:34px; height:34px; border-radius:9px; flex-shrink:0;
+  background:rgba(177,54,27,.1); color:var(--accent); font-size:16px;
+}
+.objection-chevron{flex-shrink:0; color:var(--accent); font-size:16px; transition:transform .3s ease}
+.objection.open .objection-chevron{transform:rotate(180deg)}
+.objection-reveal{display:grid; grid-template-rows:0fr; transition:grid-template-rows .35s ease}
+.objection.open .objection-reveal{grid-template-rows:1fr}
+.objection-body{overflow:hidden; min-height:0}
+.objection-text{padding:16px 22px 20px; border-top:1px solid var(--accent-soft); color:#433d31; font-size:15.5px}
+.objection-text p{margin:0}
+
 /* ---------- footer ---------- */
 footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 .cite{
@@ -492,7 +518,7 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
 
     <p></p>
     <div class="reveal">
-      <p>To answer your request, the AI needs to do some work behind the scenes. To put it simply, more tokens mean more computational work. And these computations are heavy! It would be very slow (like really really slow) to run the best models out there on a regular computer. For this reason, when you submit your request, it is sent over the internet to a more powerful computer owned by an AI provider. The model runs on their computer, generates the answer token by token, and the provider sends the final answer back to you.
+      <p>The more tokens in the response, the more computational work the model needs to do behind the scenes. And AI computations are heavy! It would be extremely slow to run the best models on a regular computer. For this reason, when you submit your request, it is sent over the internet to a more powerful computer owned by an AI provider. The model — which lives on their computer — generates the answer token by token, and the provider sends the final answer back to you.
       </p>
 
       <div class="provider-demo">
@@ -507,6 +533,26 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
     </div>
 
     <!--<p>When you use an AI model, the provider hosting the service charges you for the number of tokens the AI used — a practice called <em><strong>pay-per-token</strong></em>. However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>-->
+    <p>Naturally, the provider wants to get compensated for the computations done by the model to answer your request, since they have to pay for equipment and electricity to run the model. Providers currently do this following a simple <em><strong>pay-per-token</strong></em> billing. The more tokens required to fulfill your request, the more computations, the more money you pay.</p>
+
+    <div class="objection reveal">
+      <button type="button" class="objection-trigger" id="objectionTrigger" aria-expanded="false" aria-controls="objectionBody">
+        <span class="objection-icon" aria-hidden="true"><i class="fa fa-comment-o"></i></span>
+        <span class="obj-q">"But I'm just using it for free, or paying a flat monthly subscription."</span>
+        <i class="fa fa-chevron-down objection-chevron" aria-hidden="true"></i>
+      </button>
+      <div class="objection-reveal">
+        <div class="objection-body" id="objectionBody">
+          <div class="objection-text">
+            <p>
+                Even in those cases, you have certain limits to how much you can use the model — for example, Claude has weekly quotas that get larger as you transition from free to paid plans and increase even further as you pay for a higher tier. <em><strong>In the background, the provider determines whether you reached your quota or not based on how many tokens the model has generated for you.</strong></em> In enterprise, actual bills based on the number of tokens are much more common compared to free or monthly subscription plans.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--<p>However, due to the nature of the process the AI uses to write its answer, the same answer can be written as different sequences of tokens, called <em><strong>tokenizations</strong></em>, which in turn means that you can be charged different amounts for the very same answer. Drag the slider below to re-tokenize an AI's answer and watch what happens to your bill.<sup><a href="#fn1" id="ref1">1</a></sup></p>-->
+
 
 
   <!-- ===================== INTERACTIVE ===================== -->
@@ -772,6 +818,16 @@ footer{padding:50px 0 70px; border-top:1px solid var(--line); margin-top:30px}
       bills.classList.remove("single");
       charBill.classList.add("show");
       discloseRow.style.display = "none";
+    });
+  }
+
+  // ---- objection accordion: toggle the skeptical aside open/closed ----
+  var objection   = document.querySelector(".objection");
+  var objTrigger  = document.getElementById("objectionTrigger");
+  if(objection && objTrigger){
+    objTrigger.addEventListener("click", function(){
+      var open = objection.classList.toggle("open");
+      objTrigger.setAttribute("aria-expanded", open ? "true" : "false");
     });
   }
 
